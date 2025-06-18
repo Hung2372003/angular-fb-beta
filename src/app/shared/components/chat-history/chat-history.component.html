@@ -1,0 +1,26 @@
+<div class="chat-container ">
+  <!-- Thanh tìm kiếm -->
+  <div class="header-title">
+    <p>Đoạn Chat</p>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-wrapper">
+      <i class="fa fa-search search-icon"></i>
+      <input type="text" placeholder="Tìm kiếm trên Messenger" class="search-input">
+    </div>
+  </div>
+
+  <div id="inbox" class="chat-list active">
+    @for (item of listNewMessage; track item) {
+      <app-preview-card
+        (click)="openChat.emit(item)"
+        [avatar]="item.groupAvatar!"
+        [title]="item.groupName"
+        [content]="item.newMessage.content"
+        [isRead]="item.status"
+        [time]="setDate(item.newMessage.createdTime)"
+      ></app-preview-card>
+    }
+  </div>
+</div>

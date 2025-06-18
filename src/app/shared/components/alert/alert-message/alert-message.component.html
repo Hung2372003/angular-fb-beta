@@ -1,0 +1,19 @@
+@if (visible) {
+  <div class="alert" [ngClass]="type" @fadeInOut>
+    <p>{{ message }}</p>
+    <button class="close-btn" (click)="close()">
+      @if( type === 'success') {
+        <i class="fa-solid fa-shield-check"></i>
+      } @else if (type === 'error') {
+       <i class="fa-solid fa-shield-xmark"></i>
+      } @else if (type === 'info') {
+        <i class="fa-solid fa-shield-slash"></i>
+      } @else if (type === 'warning') {
+        <i class="fa-solid fa-shield-exclamation"></i>
+      }
+    </button>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" [style.animationDuration.ms]="duration"></div>
+  </div>
+}

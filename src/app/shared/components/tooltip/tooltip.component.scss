@@ -1,0 +1,20 @@
+
+:host{
+       --backgroundTooltip:#000000bf;
+       --textTooltipColor:white;
+}
+.tooltip {
+  position: absolute;
+  background: var(--backgroundTooltip);
+  color: var(--textTooltipColor);
+  padding: 9px 10px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 14px;
+  font-weight: 400;
+  z-index: 9999;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}

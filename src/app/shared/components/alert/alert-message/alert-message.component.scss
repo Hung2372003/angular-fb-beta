@@ -1,0 +1,54 @@
+:host{
+  position: fixed;
+  right: 0;
+}
+.alert {
+  position: relative;
+  padding: 10px 17px 10px 23px;
+  border-radius: 3px;
+  margin:17px;
+  border: 1 px solid transparent;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 0 17px 4px rgba(0, 0, 0, 0.2);
+  &.success { background-color: #4caf50; }
+  &.error { background-color: #b43229; }
+  &.info { background-color: #1284e1; }
+  &.warning { background-color: #ce7e05; }
+  display: flex;
+  align-items: center;
+  gap: 23px;
+  p{
+    margin: 0;
+    padding: 0;
+    flex: 1 1 auto;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100%;
+  }
+  .close-btn {
+    flex: 0 0 auto;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+  }
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    height: 5px;
+    background-color: rgb(255 255 255 / 88%);
+    width: 100%;
+    border-radius: 50px;
+    animation-name: shrink;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}

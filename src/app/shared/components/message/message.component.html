@@ -1,0 +1,61 @@
+@if (time) {
+  <div class="time">
+    <p>{{time}}</p>
+  </div>
+}
+
+<div
+  class="message-container"
+  [class.sent]="sentMessage"
+  appTooltip="uytuytuyt"
+  >
+  <div class="avatar" [class.sent]="sentMessage">
+    <img [class.display-true]="endMessage ||( !endMessage && !startMessage ) " src="{{avatar}}" alt="">
+  </div>
+  <div class="main">
+    @if (name) {
+      <div class="name" [class.sent]="sentMessage">
+        <p>{{name}}</p>
+      </div>
+    }
+    <div class="main-content" [class.sent]="sentMessage">
+      <div>
+        <div class="content"
+          [class.sent]="sentMessage"
+          [class.received]="!sentMessage"
+          [class.start-sent]="sentMessage && startMessage"
+          [class.end-sent]="sentMessage && endMessage"
+          [class.start-received]="!sentMessage && startMessage"
+          [class.end-received]="!sentMessage && endMessage"
+          >
+          <p>{{content}}</p>
+
+        </div>
+
+      </div>
+      <div>
+        <ul class="action">
+          <li class="feeling">
+            <div><i class="fa-solid fa-face-smile"></i></div>
+            <div class="list-feeling">
+              <ul style="display: none;">
+                <li><i class="fa-solid fa-thumbs-up"></i></li>
+                <li><i class="fa-solid fa-heart"></i></li>
+              </ul>
+            </div>
+          </li>
+          <li class="reply">
+            <div>
+              <i class="fa-solid fa-share"></i>
+            </div>
+          </li>
+          <li class="more">
+            <div>
+              <i class="fa-regular fa-circle-ellipsis-vertical"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

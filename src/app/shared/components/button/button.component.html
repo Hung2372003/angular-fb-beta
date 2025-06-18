@@ -1,0 +1,21 @@
+
+<ng-content></ng-content>
+@if (tooltip) {
+  <span class="tooltip-container"
+    [class.top]="tooltipTop"
+    [class.bottom]="tooltipBottom"
+    [class.right]="tooltipRight"
+    [class.left]="tooltipLeft"
+    >
+    <span class="tooltip-text">{{tooltip}}</span>
+    @if (directionTooltip) {
+      <span class="direction"
+        [class.top]="tooltipTop"
+        [class.bottom]="tooltipBottom"
+        [class.right]="tooltipRight"
+        [class.left]="tooltipLeft"
+      ></span>
+    }
+  </span>
+}
+

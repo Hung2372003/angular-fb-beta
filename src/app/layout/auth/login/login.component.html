@@ -1,0 +1,123 @@
+
+<div class="container" [class.active]="toggleFormLogin">
+    <div class="form-box login">
+      <form action="" [formGroup]="authLoginForm" (ngSubmit)="onSubmitLogin()">
+        <h1>Login</h1>
+         @for (field of inputLoginField; track $index) {
+          <div class="input-box">
+            <input [type]="field.fieldName =='password'? (showPassword ? 'text' : 'password') : field.type"
+                placeholder="{{field.fieldName| sentenceCase}}" name="{{field.fieldName}}"
+                formControlName="{{field.fieldName}}"
+                (blur)="onFieldTouchOrClick(field.fieldName,authLoginForm)"
+                (input)="onFieldTouchOrClick(field.fieldName,authLoginForm)"
+                [class.error]="isFieldInvalid(field.fieldName,authLoginForm)">
+                @if(field.fieldName != 'password'){
+                   <i class="{{field.fieldIcon}}"></i>
+                } @else {
+                   @if(isFieldInvalid(field.fieldName,authLoginForm)){
+                       <i class="fa-regular fa-lock-keyhole"></i>
+                    } @else if(!isFieldInvalid('password',authLoginForm) ) {
+                      <i (click)="showPassword = !showPassword" class="fa-solid" [ngClass]="{'fa-eye': !showPassword,'fa-eye-slash': showPassword}" style="cursor: pointer;"></i>
+                    }
+                }
+          </div>
+           <div [class.show]="isFieldInvalid(field.fieldName,authLoginForm)" class="text error"><span>{{field.fieldName | sentenceCase}} is required!</span></div>
+        }
+        <div class="forgot-link">
+          <a href="#">Forgot password?</a>
+        </div>
+        <button class="btn" type="submit">Login</button>
+        <p>or login with social platforms</p>
+        <div class="social-icons">
+          <a href="#"><img class="google" src="google.png"></a>
+          <a  href="#"><img class="facebook" src="facebook.ico"></a>
+        </div>
+      </form>
+    </div>
+
+     <div class="form-box register">
+      <form action="" [formGroup]="authRegisterForm" (ngSubmit)="onSubmitRegister()">
+        <h1>Registration</h1>
+        <div class="row-2">
+          <div>
+              <div class="input-box register">
+                  <input type="text" placeholder="Name" name="name"
+                      formControlName="name"
+                      (blur)="onFieldTouchOrClick('name',authRegisterForm)"
+                      (input)="onFieldTouchOrClick('name',authRegisterForm)"
+                      [class.error]="isFieldInvalid('name',authRegisterForm)">
+                  <i class="fa-regular fa-pen-nib"></i>
+              </div>
+              <div [class.show]="isFieldInvalid('name',authRegisterForm)" class="text error"><span>Name is required!</span></div>
+          </div>
+          <div>
+              <div (click)="picker.open()" class="input-box register">
+                  <input
+                      matInput
+                      readonly
+                      [matDatepicker]="picker"
+                      formControlName="birthday"
+                      class="input-box register date"
+                      placeholder="Birthday"
+                      >
+                    <i class="fa-regular fa-calendar-week"></i>
+                  <mat-datepicker-toggle style="display: none;" matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+              </div>
+          </div>
+        </div>
+
+        @for(field of inputRegisterField; track $index){
+           <div class="input-box register">
+                <input [type]="(field.fieldName =='password' || field.fieldName =='repeatPassword') ? (field.fieldName =='password'? (showPassword ? 'text' : 'password'):(showRepeatPassword ? 'text' : 'repeatPassword')) : field.type"
+                  placeholder="{{field.fieldName | sentenceCase}}" name="{{field.fieldName}}"
+                  formControlName="{{field.fieldName}}"
+                  (blur)="onFieldTouchOrClick(field.fieldName,authRegisterForm)"
+                  (input)="onFieldTouchOrClick(field.fieldName,authRegisterForm)"
+                  [class.error]="isFieldInvalid(field.fieldName,authRegisterForm)">
+                 @if(field.fieldName != 'password' && field.fieldName != 'repeatPassword'){
+                   <i class="{{field.fieldIcon}}"></i>
+                } @else {
+                   @if(isFieldInvalid(field.fieldName,authRegisterForm)){
+                       <i class="{{field.fieldIcon}}"></i>
+                    } @else if(!isFieldInvalid(field.fieldName,authRegisterForm) && field.fieldName == 'password' ) {
+                     <i (click)="showPassword = !showPassword" class="fa-solid" style="cursor: pointer;"
+                      [class.fa-eye]="showPassword == false"
+                      [class.fa-eye-slash]="showPassword==true">
+                    </i>
+                    } @else {
+                       <i (click)="showRepeatPassword = !showRepeatPassword" class="fa-solid" style="cursor: pointer;"
+                        [class.fa-eye]="showRepeatPassword == false"
+                        [class.fa-eye-slash]="showRepeatPassword==true">
+                      </i>
+                    }
+                }
+            </div>
+            <div [class.show]="isFieldInvalid(field.fieldName,authRegisterForm)" class="text error"><span>{{ field.fieldName=='email' ? ('Please enter correct' + field.fieldName) : (field.fieldName + 'is required!')}}</span></div>
+            @if(field.fieldName=='repeatPassword'){
+               <div [class.show]="authRegisterForm.hasError('passwordMismatch') && (authRegisterForm.get('repeatPassword')?.touched || authRegisterForm.get('password')?.touched)" class="text error">Password and repeat password do not match!</div>
+            }
+        }
+        <div class="action">
+            <button class="btn" type="submit"  >Register</button>
+            <p>or register with social platforms</p>
+            <div class="social-icons">
+            <a href="#"><img class="google" src="google.png"></a>
+            <a  href="#"><img class="facebook" src="facebook.ico"></a>
+            </div>
+        </div>
+      </form>
+    </div>
+    <div class="toggle-box">
+      <div class="toggle-panel toggle-left">
+        <h3>Hello, Welcome!</h3>
+        <p>Don't have an account?</p>
+        <button (click)="toggleForm()" class="btn register-btn">Register</button>
+      </div>
+       <div class="toggle-panel toggle-right">
+        <h3>Welcome Back!</h3>
+        <p>Alreadly have an account?</p>
+        <button (click)="toggleForm()" class="btn login-btn">Login</button>
+      </div>
+    </div>
+</div>

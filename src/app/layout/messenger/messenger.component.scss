@@ -1,0 +1,16 @@
+:host{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    gap: 17px;
+    padding: 17px;
+    box-sizing: border-box;
+
+}
+app-chat-history{
+    flex: 1 1 auto;
+    
+}
+app-chat-box{
+    flex: 2 1 auto;
+}

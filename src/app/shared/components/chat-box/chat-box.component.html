@@ -1,0 +1,263 @@
+
+<app-tooltip #tooltip></app-tooltip>
+<header
+    (mouseenter)="tooltipService.show('Tooltip ngay vị trí chuột')"
+    (mouseleave)="tooltipService.hide()"
+>
+    <div class="title">
+        <app-preview-card
+            avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+            title="Nguyễn Văn Hưng"
+            content="đang hoạt động"
+            [isRead]="true"
+            [theme]="{
+                avatarSize:'45px'
+            }"
+        >
+
+        </app-preview-card>
+    </div>
+    <div class="main-action">
+        <ul>
+            <li class="call">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Gọi điện thoại"
+                    [directionTooltip]="true"
+                    [tooltipBottom]="true"
+                >
+                    <i class="fa-solid fa-phone"></i>
+                </app-button>
+            </li>
+            <li class="call-video">
+
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Gọi video"
+                    [directionTooltip]="true"
+                    [tooltipBottom]="true"
+                >
+                    <i class="fa-solid fa-video"></i>
+                </app-button>
+            </li>
+            <li class="setting">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Cài đặt"
+                    [directionTooltip]="true"
+                    [tooltipBottom]="true"
+                >
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                </app-button>
+
+            </li>
+        </ul>
+    </div>
+</header>
+<section>
+    <app-message
+    avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+    content="Heloooceqwlkfhwekjhtgoierhgioeuytoieuoiutoieutoiertuoerutoreuteoriutoierutoretuoertuoerutoiytieytiertyeirutyeityeriutyerityeiutyeityerityeriutyả n
+    hà"
+    [sentMessage]="false"
+    [startMessage]="false"
+    [endMessage]="false"
+    [displayTime]="true"
+    time="11h55"
+    ></app-message>
+
+     <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+       <app-message
+       time="11h45"
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+       ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+        <app-message
+        style="margin-top: 17px;"
+        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
+        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
+        [sentMessage]="true"
+        [startMessage]="false"
+        [endMessage]="false"
+        [displayTime]="true"
+    ></app-message>
+</section>
+<footer>
+    <div class="extra-action">
+        <ul>
+            <li [class.hidden]="!isHiddenAction" class="action">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Mở hành động khác"
+                    [directionTooltip]="true"
+                    [tooltipTop]="true"
+                >
+                        <i class="fa-solid fa-circle-plus"></i>
+                </app-button>
+            </li>
+            <li [class.hidden]="isHiddenAction" class="action">
+                    <app-button
+                        class="tooltip-container"
+                        tooltip="Gửi clip âm thanh"
+                        [directionTooltip]="true"
+                        [tooltipTop]="true"
+                    >
+                         <i class="fa-solid fa-microphone"></i>
+                    </app-button>
+            </li>
+            <li [class.hidden]="isHiddenAction" class="action">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Đính kèm file"
+                    [directionTooltip]="true"
+                    [tooltipTop]="true"
+                >
+                    <i class="fa-regular fa-images"></i>
+                </app-button>
+            </li>
+            <li [class.hidden]="isHiddenAction" class="action">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Chọn nhãn dán"
+                    [directionTooltip]="true"
+                    [tooltipTop]="true"
+                >
+                     <i class="fa-solid fa-person-breastfeeding"></i>
+                </app-button>
+            </li>
+            <li [class.hidden]="isHiddenAction" class="action">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Chọn file gif"
+                    [directionTooltip]="true"
+                    [tooltipTop]="true"
+                >
+                      <i class="fa-solid fa-gif"></i>
+                </app-button>
+            </li>
+            <li class="input-container">
+                    <div class="input"
+                    (input)="onInput($event)"
+                    #chatInput
+                    contenteditable="true"
+                    (keydown)="onKeyDown($event)"
+                    aria-placeholder="Aa"
+                    ></div>
+                    <div style="width: 33px;flex: 0 0 auto;"></div>
+                    <div class="action feeling">
+                        <i style="position: relative;" class="fa-solid fa-face-smile">
+                             <app-button
+                                class="tooltip-container"
+                                style="position: absolute; top: 0;right: 0;height: 100%;"
+                                tooltip="Chọn cảm xúc"
+                                [directionTooltip]="true"
+                                [tooltipTop]="true"
+
+                            >
+                            </app-button>
+                        </i>
+                    </div>
+            </li>
+            <li [class.hidden]="isHiddenAction" class="action">
+                 <app-button
+                   class="tooltip-container"
+                    tooltip="Gửi Like"
+                    [directionTooltip]="true"
+                    [tooltipTop]="true"
+                >
+                      <i class="fa-solid fa-thumbs-up"></i>
+                </app-button>
+
+            </li>
+            <li [class.hidden]="!isHiddenAction" class="action">
+                <app-button
+                    class="tooltip-container"
+                    tooltip="Nhấn Enter để gửi"
+                    [directionTooltip]="true"
+                    [tooltipBottom]="true"
+                >
+                      <i class="fa-solid fa-paper-plane-top"></i>
+                </app-button>
+            </li>
+        </ul>
+    </div>
+
+</footer>

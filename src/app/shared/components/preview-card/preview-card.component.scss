@@ -1,0 +1,111 @@
+// :host{
+//     --hoverBackgroundColor:rgb(227 227 227 / 70%);
+//     --backgroundColor:rgb(255, 255, 255);
+//     --titleColor:black;
+//     --titleSize:17px;
+//     --contentColor: black;
+//     --contentApprovedColor:#898989;
+    // --borderOnlineDotColor:#ffffff;
+//     --avatarSize:50px
+// }
+
+:host{
+    display: block;
+    padding: 7px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    &:hover{
+    background: var(--hoverBackgroundColor)
+    }
+}
+.container{
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+.avatar-container{
+    height: var(--avatarSize);
+    aspect-ratio: 1/1;
+    position: relative;
+    flex: 0 0 auto;
+    .avatar{
+        height: 100%;
+        aspect-ratio: 1/1;
+        img{
+            height: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+        }
+
+    }
+
+}
+
+.content-container{
+    flex:1 1 auto;
+    overflow: hidden;
+    .title{
+        font-size: var(--titleSize);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        width: 100%;
+        color: var(--titleColor);
+    }
+    .content{
+        font-size: calc(var(--titleSize) - 5px);
+        display: flex;
+        flex-direction: row;
+        font-weight: bold;
+        gap: 3px;
+        color: var(--contentColor);
+        &.approved{
+            color: var(--contentApprovedColor);
+            font-weight: 600;
+        }
+        span{
+            white-space: nowrap;
+        }
+        .main-content{
+            flex: 0 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+        }
+    }
+
+
+}
+.notifi-icon{
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .not-read{
+        height:10px;
+        aspect-ratio: 1/1;
+        background: #216FDB ;
+        border-radius: 50%;
+    }
+    .bell{
+        color: var(--contentApprovedColor);
+    }
+
+}
+.online-dot {
+    height: 12px;
+    background-color: #009f00;
+    border-radius: 50%;
+    display: inline-block;
+    border: 3px solid;
+    border-color: var(--borderOnlineDotColor);
+    position: absolute;
+    bottom: 0%;
+    aspect-ratio: 1 / 1;
+    right: -7%;
+  }

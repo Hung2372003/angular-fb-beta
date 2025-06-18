@@ -1,0 +1,9 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+app-alert-host{
+  position: fixed;
+  z-index: 1000;
+}

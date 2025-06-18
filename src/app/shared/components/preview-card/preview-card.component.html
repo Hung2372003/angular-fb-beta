@@ -1,0 +1,33 @@
+<section class="container">
+  @if (avatar) {
+    <div class="avatar-container">
+      <div class="avatar">
+        <img src="{{avatar}}" alt="">
+      </div>
+      <div class="online-dot"></div>
+    </div>
+  }
+  <div class="content-container">
+    <div class="title">
+      <span>{{title}}</span>
+    </div>
+    @if (content) {
+      <div  class="content" [class.approved]="isRead">
+        <span class="main-content">{{content}}</span>
+        <span>&middot;</span>
+        <span>{{time}}</span>
+      </div>
+    }
+  </div>
+  <div class="notifi-icon">
+    @if (false) {
+      <div class="bell">
+        <i class="fa-solid fa-bell-slash"></i>
+      </div>
+    }
+    @if (isRead==false) {
+      <div class="not-read">
+      </div>
+    }
+  </div>
+</section>
