@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://localhost:44334/api'
+  apiUrl: 'https://chatapi-49ao.onrender.com/api'
 };

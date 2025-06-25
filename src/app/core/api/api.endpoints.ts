@@ -11,6 +11,6 @@ export const buildAuthAPI = (api: CallApiService) => ({
   register: (data: RegisterRequest): Promise<ApiResponse<object>> =>
     api.callApi<ApiResponse<object>>('Security/RegisterAcc', 'post', data),
 
-  googleLogin: (data: { token: string }): Promise<ApiResponse<object>> =>
-    api.callApi<ApiResponse<object>>('Security/VerifyGoogle', 'post', data)
+  googleExchangeCode: (data: { code: string }): Promise<ApiResponse<object>> =>
+    api.callApi<ApiResponse<object>>('Security/GoogleExchangeCode', 'post', data)
 });

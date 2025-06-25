@@ -1,5 +1,5 @@
 import { RegisterRequest } from './../../../core/models/api/register.api.interface';
-import {  Component, OnInit } from '@angular/core';
+import {  AfterViewInit, Component, OnInit } from '@angular/core';
 import {  FormControl, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -8,13 +8,10 @@ import { ErrorInputRegister, InputField, LoginFormData, RegisterFormData } from 
 import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
 import { CommonModule } from '@angular/common';
 import { CallApiService } from '../../../core/services/call-api.service';
-import { MessageResponse } from '../../../core/models/api/common-message-response.api.interface';
 import { SentenceCasePipe } from '../../../shared/pipe/sentence-case.pipe';
 import { LoadingService } from '../../../core/services/loading.service';
-import { ApiResponse } from '../../../core/models/api/common-response.api.interface';
 import { buildAuthAPI } from '../../../core/api/api.endpoints';
-import { GoogleAuthService } from '../../../core/services/google-auth.service';
-import { GoogleSdkLoaderService } from '../../../core/services/google-sdk-loader.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -28,16 +25,19 @@ import { GoogleSdkLoaderService } from '../../../core/services/google-sdk-loader
   styleUrl: './login.component.scss',
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   private authAPI: ReturnType<typeof buildAuthAPI>;
+
   constructor(
     private alert: AlertService,
     private ApiService:CallApiService,
-    private googleService:GoogleAuthService,
     private loadingService:LoadingService,
-      private sdkLoader: GoogleSdkLoaderService,
+    private route: ActivatedRoute,
 
-  ) {this.authAPI = buildAuthAPI(this.ApiService);}
+  ) {
+    this.authAPI = buildAuthAPI(this.ApiService);
+  }
+  currentUrl: string=''
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
   toggleFormLogin: boolean = false;
@@ -61,10 +61,19 @@ export class LoginComponent implements OnInit {
     { fieldName: 'repeatPassword', fieldIcon: 'fa-regular fa-arrows-repeat', type: 'password'}
   ]
 
-  async ngOnInit(): Promise<void> {
 
-    // await this.sdkLoader.load();
+  async ngAfterViewInit(): Promise<void> {
+    const code = this.route.snapshot.queryParamMap.get('code');
+    if (code) {
+          let data = await this.authAPI.googleExchangeCode({ code: code });
+          this.alert.show(data.title,'success',4000,Date.now())
+      }
+    else {
+      console.error('Không có code từ Google trả về');
+    }
 
+  }
+  ngOnInit(): void {
     this.authLoginForm =  new FormGroup<LoginFormData>({
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] })
@@ -88,13 +97,15 @@ export class LoginComponent implements OnInit {
 
   }
   async loginGoogle(){
-    await this.googleService.initializeGoogleLogin(async (response) => {
-      const idToken = response.credential;
-      let data = await this.authAPI.googleLogin({ token: idToken });
-      this.alert.show(data.title, data.error ? 'error' : 'success', 3000, Date.now());
-    });
-    await this.googleService.promptLogin()
-    await this.googleService.revoke()
+    const clientId = '385205005569-lcj7sjqrccd2c3t42u3637mgiv179t5l.apps.googleusercontent.com';
+    const redirectUri = encodeURIComponent(window.location.origin);
+    const scope = encodeURIComponent('openid email profile');
+    const state = crypto.randomUUID();
+
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+                    `client_id=${clientId}&redirect_uri=${redirectUri}` +
+                    `&response_type=code&scope=${scope}&state=${state}`;
+    window.location.href = authUrl;
   }
 
   toggleForm() {
