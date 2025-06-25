@@ -87,13 +87,14 @@ export class LoginComponent implements OnInit {
     });
 
   }
-  loginGoogle(){
-    this.googleService.initializeGoogleLogin(async (response) => {
+  async loginGoogle(){
+    await this.googleService.initializeGoogleLogin(async (response) => {
       const idToken = response.credential;
       let data = await this.authAPI.googleLogin({ token: idToken });
       this.alert.show(data.title, data.error ? 'error' : 'success', 3000, Date.now());
     });
-    this.googleService.promptLogin();
+    await this.googleService.promptLogin()
+    await this.googleService.revoke()
   }
 
   toggleForm() {

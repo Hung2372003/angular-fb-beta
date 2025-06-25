@@ -15,14 +15,14 @@ export class GoogleAuthService {
 
 
   initializeGoogleLogin(callback: (res: google.accounts.id.CredentialResponse) => void): void {
-     if (this.initialized) return; // Đảm bảo chỉ khởi tạo 1 lần
+    if (this.initialized) return; // Đảm bảo chỉ khởi tạo 1 lần
 
     google.accounts.id.initialize({
       client_id: this.clientId,
       callback,
       cancel_on_tap_outside: false,
       auto_select: false,
-      ux_mode: 'popup',
+      ux_mode: 'redirect',
       nonce: crypto.randomUUID()
     } as google.accounts.id.IdConfiguration);
 
@@ -36,11 +36,9 @@ export class GoogleAuthService {
     }
 
     this.initialized = true;
-    //this.promptLogin()
   }
 
   promptLogin(): void {
-    // google.accounts.id.disableAutoSelect();
     google.accounts.id.prompt((notification) => {
       if (notification.isNotDisplayed()) {
         console.warn('Hộp thoại KHÔNG hiển thị:', notification.getNotDisplayedReason());
@@ -54,7 +52,9 @@ export class GoogleAuthService {
         console.warn('Google login bị đóng:', notification.getDismissedReason());
           this.alert.show('Google login bị đóng','error',4000,Date.now())
       }
+
     });
+
   }
 
   revoke(): void {
