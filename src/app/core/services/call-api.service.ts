@@ -2,9 +2,10 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, timeout } from 'rxjs/operators';
 import { ErrorHandlingService } from './error-handling.service';
 import { environment } from '../../../environments/environment';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,14 @@ export class CallApiService {
     private http: HttpClient,
     private errorHandlingService: ErrorHandlingService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private loadingService:LoadingService
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.hostUrlApi = environment.apiUrl;
   }
 
+  async callApi<T>(endpoint: string, method: 'get', params?: any): Promise<T>;
+  async callApi<T>(endpoint: string, method: 'post' | 'put' | 'patch' | 'delete', body?: any): Promise<T>;
   async callApi<T>(endpoint: string, method: string, data?: any): Promise<T> {
     if (!this.isBrowser) {
       throw new Error('API calls are not supported in server-side rendering');
@@ -50,14 +54,19 @@ export class CallApiService {
         throw new Error(`Unsupported HTTP method: ${method}`);
     }
 
+    this.loadingService.show();
     try {
+
       const request$ = this.http.request<T>(m, url, options).pipe(
+        timeout(15000),
         map(response => response as T)
       );
       return await firstValueFrom(request$);
     } catch (error) {
       this.errorHandlingService.handleError(error as HttpErrorResponse);
       throw error;
+    } finally {
+      this.loadingService.hide();
     }
   }
 }

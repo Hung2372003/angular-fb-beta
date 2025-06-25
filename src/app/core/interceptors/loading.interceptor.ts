@@ -1,22 +1,13 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { LoadingService } from '../services/loading.service';
-
-let totalRequests = 0;
+import { finalize } from 'rxjs';
+import { LoadingService } from '../services/loading.service'; // đổi đường dẫn phù hợp
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
-  
-  totalRequests++;
-  loadingService.setLoading(true);
+  loadingService.show();
 
   return next(req).pipe(
-    finalize(() => {
-      totalRequests--;
-      if (totalRequests === 0) {
-        loadingService.setLoading(false);
-      }
-    })
+    finalize(() => loadingService.hide())
   );
-}; 
+};

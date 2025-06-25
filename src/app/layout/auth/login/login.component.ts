@@ -1,3 +1,4 @@
+import { RegisterRequest } from './../../../core/models/api/register.api.interface';
 import {  Component, OnInit } from '@angular/core';
 import {  FormControl, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -9,6 +10,11 @@ import { CommonModule } from '@angular/common';
 import { CallApiService } from '../../../core/services/call-api.service';
 import { MessageResponse } from '../../../core/models/api/common-message-response.api.interface';
 import { SentenceCasePipe } from '../../../shared/pipe/sentence-case.pipe';
+import { LoadingService } from '../../../core/services/loading.service';
+import { ApiResponse } from '../../../core/models/api/common-response.api.interface';
+import { buildAuthAPI } from '../../../core/api/api.endpoints';
+import { GoogleAuthService } from '../../../core/services/google-auth.service';
+import { GoogleSdkLoaderService } from '../../../core/services/google-sdk-loader.service';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +29,15 @@ import { SentenceCasePipe } from '../../../shared/pipe/sentence-case.pipe';
 })
 
 export class LoginComponent implements OnInit {
-
+  private authAPI: ReturnType<typeof buildAuthAPI>;
   constructor(
     private alert: AlertService,
-    private ApiService:CallApiService
-  ) {}
+    private ApiService:CallApiService,
+    private googleService:GoogleAuthService,
+    private loadingService:LoadingService,
+      private sdkLoader: GoogleSdkLoaderService,
+
+  ) {this.authAPI = buildAuthAPI(this.ApiService);}
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
   toggleFormLogin: boolean = false;
@@ -51,7 +61,10 @@ export class LoginComponent implements OnInit {
     { fieldName: 'repeatPassword', fieldIcon: 'fa-regular fa-arrows-repeat', type: 'password'}
   ]
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    // await this.sdkLoader.load();
+
     this.authLoginForm =  new FormGroup<LoginFormData>({
       username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       password: new FormControl('', { nonNullable: true, validators: [Validators.required] })
@@ -72,7 +85,17 @@ export class LoginComponent implements OnInit {
     this.authRegisterForm.get('repeatPassword')?.valueChanges.subscribe(() => {
       this.authRegisterForm.updateValueAndValidity();
     });
+
   }
+  loginGoogle(){
+    this.googleService.initializeGoogleLogin(async (response) => {
+      const idToken = response.credential;
+      let data = await this.authAPI.googleLogin({ token: idToken });
+      this.alert.show(data.title, data.error ? 'error' : 'success', 3000, Date.now());
+    });
+    this.googleService.promptLogin();
+  }
+
   toggleForm() {
     this.clearAllErrors(this.authLoginForm)
     this.clearAllErrors(this.authRegisterForm)
@@ -112,19 +135,28 @@ export class LoginComponent implements OnInit {
         this.alert.show('Please enter complete information!', 'warning', 3000, Date.now());
         return;
     }
-
-    let message:MessageResponse<object> = await this.ApiService.callApi('Security/Register','post',this.authRegisterForm.value)
-    console.log(message);
+    const raw = this.authRegisterForm.getRawValue();
+    const dataRequest : RegisterRequest={
+      name: raw.name,
+      email: raw.email,
+      birthday: raw.birthday,
+      userAccount: raw.username,
+      password: raw.password
+    }
+    let message = await this.authAPI.register(dataRequest)
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
 
   }
   async onSubmitLogin(){
       if (this.authLoginForm.invalid) {
         this.markFormGroupTouched(this.authLoginForm);
+        this.loadingService.hide();
         this.alert.show('Please enter complete information!', 'warning', 3000, Date.now());
+
         return;
     }
-    let message:MessageResponse<object> = await this.ApiService.callApi('Security/UserLogin','post',this.authLoginForm.value)
+
+    let message = await this.authAPI.login(this.authLoginForm.getRawValue())
     console.log(message);
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
 

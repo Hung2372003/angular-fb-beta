@@ -9,16 +9,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
-      }
+      },
+      withCredentials: true // ✅ Chính xác ở đây
     });
+  } else {
+    req = req.clone({ withCredentials: true }); // Nếu không có token nhưng vẫn cần credentials
   }
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        // Handle unauthorized error (e.g., redirect to login)
         console.log('Unauthorized access - redirecting to login');
-        // Add your login redirect logic here
+
+        // Thêm xử lý điều hướng hoặc logout ở đây nếu cần
       }
       return throwError(() => error);
     })

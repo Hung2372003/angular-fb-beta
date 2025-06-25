@@ -29,8 +29,8 @@
         <button class="btn" type="submit">Login</button>
         <p>or login with social platforms</p>
         <div class="social-icons">
-          <a href="#"><img class="google" src="google.png"></a>
-          <a  href="#"><img class="facebook" src="facebook.ico"></a>
+          <div class="login-exception" (click)="loginGoogle()"><img class="google" src="google.png"></div>
+          <a class="login-exception" href="#"><img class="facebook" src="facebook.ico"></a>
         </div>
       </form>
     </div>
@@ -69,7 +69,7 @@
 
         @for(field of inputRegisterField; track $index){
            <div class="input-box register">
-                <input [type]="(field.fieldName =='password' || field.fieldName =='repeatPassword') ? (field.fieldName =='password'? (showPassword ? 'text' : 'password'):(showRepeatPassword ? 'text' : 'repeatPassword')) : field.type"
+                <input [type]="(field.fieldName =='password' || field.fieldName =='repeatPassword') ? (field.fieldName =='password'? (showPassword ? 'text' : 'password'):(showRepeatPassword ? 'text' : 'password')) : field.type"
                   placeholder="{{field.fieldName | sentenceCase}}" name="{{field.fieldName}}"
                   formControlName="{{field.fieldName}}"
                   (blur)="onFieldTouchOrClick(field.fieldName,authRegisterForm)"
@@ -88,12 +88,12 @@
                     } @else {
                        <i (click)="showRepeatPassword = !showRepeatPassword" class="fa-solid" style="cursor: pointer;"
                         [class.fa-eye]="showRepeatPassword == false"
-                        [class.fa-eye-slash]="showRepeatPassword==true">
+                        [class.fa-eye-slash]="showRepeatPassword == true">
                       </i>
                     }
                 }
             </div>
-            <div [class.show]="isFieldInvalid(field.fieldName,authRegisterForm)" class="text error"><span>{{ field.fieldName=='email' ? ('Please enter correct' + field.fieldName) : (field.fieldName + 'is required!')}}</span></div>
+            <div [class.show]="isFieldInvalid(field.fieldName,authRegisterForm)" class="text error"><span>{{ field.fieldName=='email' ? ('Please enter correct email address!') : (field.fieldName + 'is required!')}}</span></div>
             @if(field.fieldName=='repeatPassword'){
                <div [class.show]="authRegisterForm.hasError('passwordMismatch') && (authRegisterForm.get('repeatPassword')?.touched || authRegisterForm.get('password')?.touched)" class="text error">Password and repeat password do not match!</div>
             }
@@ -102,8 +102,8 @@
             <button class="btn" type="submit"  >Register</button>
             <p>or register with social platforms</p>
             <div class="social-icons">
-            <a href="#"><img class="google" src="google.png"></a>
-            <a  href="#"><img class="facebook" src="facebook.ico"></a>
+             <a class="login-exception" href="#"><img class="google" src="google.png"></a>
+          <a class="login-exception" href="#"><img class="facebook" src="facebook.ico"></a>
             </div>
         </div>
       </form>
@@ -117,7 +117,7 @@
        <div class="toggle-panel toggle-right">
         <h3>Welcome Back!</h3>
         <p>Alreadly have an account?</p>
-        <button (click)="toggleForm()" class="btn login-btn">Login</button>
+        <button id="googleSignInBtn" (click)="toggleForm()" class="btn login-btn">Login</button>
       </div>
     </div>
 </div>
