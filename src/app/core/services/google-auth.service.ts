@@ -20,7 +20,7 @@ export class GoogleAuthService {
     google.accounts.id.initialize({
       client_id: this.clientId,
       callback,
-      cancel_on_tap_outside: false
+      cancel_on_tap_outside: false,
       auto_select: false,
       ux_mode: 'popup',
       nonce: crypto.randomUUID()
