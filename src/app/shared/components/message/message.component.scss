@@ -5,6 +5,7 @@
 //     --messageSentColor:white;
 //     --messageReceivedColor:black;
 //     --hoverIcon:rgb(225, 225, 225);
+//
 // }
 
 :host {
@@ -14,7 +15,7 @@
     align-items: center;
     padding: 0px 7px;
     margin-top: 2px;
-    
+
 }
 :host:hover .action{
     opacity: 1;
@@ -30,6 +31,11 @@ p{
 }
 .time{
     margin: 17px;
+    p{
+      font-size: 13px;
+    font-weight: 500;
+    color: var(--colorTime);
+    }
 }
 .message-container{
 
@@ -53,6 +59,7 @@ p{
  }
 }
 .avatar{
+    position: relative;
     aspect-ratio: 1 / 1;
     height: 30px;
     cursor: pointer;

@@ -4,7 +4,9 @@
       <div class="avatar">
         <img src="{{avatar}}" alt="">
       </div>
-      <div class="online-dot"></div>
+      @if (isOnline) {
+        <div class="online-dot"></div>
+      }
     </div>
   }
   <div class="content-container">

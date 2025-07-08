@@ -11,7 +11,7 @@ import { CallApiService } from '../../../core/services/call-api.service';
 import { SentenceCasePipe } from '../../../shared/pipe/sentence-case.pipe';
 import { LoadingService } from '../../../core/services/loading.service';
 import { buildAuthAPI } from '../../../core/api/api.endpoints';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private ApiService:CallApiService,
     private loadingService:LoadingService,
     private route: ActivatedRoute,
+    private router: Router
 
   ) {
     this.authAPI = buildAuthAPI(this.ApiService);
@@ -65,8 +66,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     const code = this.route.snapshot.queryParamMap.get('code');
     if (code) {
-          let data = await this.authAPI.googleExchangeCode({ code: code });
+          let data = await this.authAPI.googleExchangeCodeLogin({ code: code });
           this.alert.show(data.title,'success',4000,Date.now())
+          this.router.navigate(['/messenger']);
       }
     else {
       console.error('Không có code từ Google trả về');
@@ -157,21 +159,23 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
     let message = await this.authAPI.register(dataRequest)
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
-
+    if(message.error == false){
+       this.router.navigate(['/messenger']);
+    }
   }
   async onSubmitLogin(){
       if (this.authLoginForm.invalid) {
         this.markFormGroupTouched(this.authLoginForm);
         this.loadingService.hide();
         this.alert.show('Please enter complete information!', 'warning', 3000, Date.now());
-
         return;
     }
 
     let message = await this.authAPI.login(this.authLoginForm.getRawValue())
-    console.log(message);
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
-
+    if(message.error==false){
+          this.router.navigate(['/messenger']);
+    }
   }
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {

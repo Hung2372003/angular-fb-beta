@@ -35,7 +35,6 @@ export class CallApiService {
     const m = method.toLowerCase();
     const options: any = {};
 
-    // Handle different HTTP methods
     switch (m) {
       case 'get':
         if (data) {
@@ -58,7 +57,6 @@ export class CallApiService {
     try {
 
       const request$ = this.http.request<T>(m, url, options).pipe(
-        timeout(15000),
         map(response => response as T)
       );
       return await firstValueFrom(request$);

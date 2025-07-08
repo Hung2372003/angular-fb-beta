@@ -1,20 +1,24 @@
 
-import { Component, Input, OnInit,ElementRef,Renderer2 } from '@angular/core';
+import { Component, Input, OnInit,ElementRef,Renderer2, OnDestroy, AfterViewInit } from '@angular/core';
+import { TooltipService } from './tooltip.service';
 @Component({
   selector: 'app-tooltip',
   imports: [],
   templateUrl: './tooltip.component.html',
   styleUrl: './tooltip.component.scss'
 })
-export class TooltipComponent implements OnInit {
+export class TooltipComponent implements OnInit,AfterViewInit {
 
    @Input() text = '';
   x = 0;
   y = 0;
   visible = false;
 
-  constructor(private elRef: ElementRef, private renderer: Renderer2) {}
+  constructor(private elRef: ElementRef,private tooltipService:TooltipService  ) {}
 
+  ngAfterViewInit(): void {
+    this.tooltipService.register(this); // ✅ this là TooltipComponent
+  }
   ngOnInit() {
     document.addEventListener('mousemove', this.updatePosition);
   }

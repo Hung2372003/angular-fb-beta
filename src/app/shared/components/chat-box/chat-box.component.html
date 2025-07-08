@@ -1,13 +1,15 @@
 
-<app-tooltip #tooltip></app-tooltip>
 <header
-    (mouseenter)="tooltipService.show('Tooltip ngay vị trí chuột')"
-    (mouseleave)="tooltipService.hide()"
+
 >
-    <div class="title">
+    <div class="title"
+
+    >
         <app-preview-card
-            avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-            title="Nguyễn Văn Hưng"
+            (mouseenter)="tooltipService.show(groupName ? groupName : 'ok')"
+            (mouseleave)="tooltipService.hide()"
+            avatar="{{groupAvater}}"
+            title="{{groupName}}"
             content="đang hoạt động"
             [isRead]="true"
             [theme]="{
@@ -56,109 +58,19 @@
     </div>
 </header>
 <section>
-    <app-message
-    avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-    content="Heloooceqwlkfhwekjhtgoierhgioeuytoieuoiutoieutoiertuoerutoreuteoriutoierutoretuoertuoerutoiytieytiertyeirutyeityeriutyerityeiutyeityerityeriutyả n
-    hà"
-    [sentMessage]="false"
-    [startMessage]="false"
-    [endMessage]="false"
-    [displayTime]="true"
-    time="11h55"
-    ></app-message>
 
-     <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
 
+  @for(item of listMesages;let index = $index;track $index){
         <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-       <app-message
-       time="11h45"
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-       ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
-        <app-message
-        style="margin-top: 17px;"
-        avatar="https://i.imgur.com/2nCt3Sbl.jpg"
-        content="htgyjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhjtfyjjjjjjj trujjrturtujpg"
-        [sentMessage]="true"
-        [startMessage]="false"
-        [endMessage]="false"
-        [displayTime]="true"
-    ></app-message>
+          [avatar]="setAvatar(item.createdBy)"
+          [content]="item.content"
+          [sentMessage]="!isSentMessage(item.createdBy)"
+          [startMessage]="setStartMessage(item,index) && !setEndMessage(item,index)"
+          [endMessage]="setEndMessage(item,index) && !setStartMessage(item,index)"
+          [displayTime]="index == 0 || (listMesages && listMesages[index - 1] && !setDateOptionMessage(item.createdTime, listMesages[index - 1].createdTime)) "
+          time="{{setDate(item.createdTime)}}"
+        ></app-message>
+  }
 </section>
 <footer>
     <div class="extra-action">

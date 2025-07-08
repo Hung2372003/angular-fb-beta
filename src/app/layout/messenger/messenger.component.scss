@@ -9,8 +9,16 @@
 }
 app-chat-history{
     flex: 1 1 auto;
-    
+    min-width: 27%;
+    max-width: 350px;
 }
 app-chat-box{
     flex: 2 1 auto;
+}
+.content{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

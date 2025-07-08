@@ -1,6 +1,6 @@
 
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-
+import { TooltipService } from '../tooltip/tooltip.service';
 
 @Component({
   selector: 'app-message',
@@ -13,10 +13,10 @@ export class MessageComponent implements OnInit {
   @Input() name!:string
   @Input() content!:string
   @Input() time!:string
-  @Input() sentMessage!:boolean
-  @Input() startMessage!:boolean
-  @Input() endMessage!:boolean
-  @Input() displayTime!:boolean
+  @Input() sentMessage?:boolean = false
+  @Input() startMessage?:boolean = false
+  @Input() endMessage?:boolean  = false
+  @Input() displayTime?:boolean  = false
   @Input() theme!:{
     messageSentBackgroundColor:string
     messageReceivedBackgroundColor:string
@@ -24,17 +24,17 @@ export class MessageComponent implements OnInit {
     messageReceivedColor:string
     hoverIcon:string
     colorIcon:string
+    colorTime:string
   }
 
   constructor(
-    private el:ElementRef
+    private el:ElementRef,
+      public tooltipService:TooltipService,
   ){}
-
 
   ngOnInit(): void {
       this.changeTheme();
       this.content = this.content.replace(/\\n/g, '\n');
-
   }
 
   changeTheme() {
@@ -46,7 +46,8 @@ export class MessageComponent implements OnInit {
           '--messageSentColor':this.theme.messageSentColor,
           '--messageReceivedColor':this.theme.messageReceivedColor,
           '--hoverIcon':this.theme.hoverIcon,
-          '--colorIcon':this.theme.colorIcon
+          '--colorIcon':this.theme.colorIcon,
+          '--colorTime':this.theme.colorTime
       });
     }else{
        this.setTheme(hostElement, {
@@ -56,6 +57,7 @@ export class MessageComponent implements OnInit {
           '--messageReceivedColor':'black',
           '--hoverIcon':'rgb(227 227 227 / 70%)',
           '--colorIcon':'#898989',
+          '--colorTime':'#8c8c8c'
       });
     }
   }
@@ -65,5 +67,4 @@ export class MessageComponent implements OnInit {
       el.style.setProperty(key, value);
     });
   }
-
 }

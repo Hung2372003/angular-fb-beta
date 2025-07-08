@@ -1,8 +1,9 @@
 export interface ApiResponse<T> {
-  id:number,
-  error:boolean,
-  title:string,
+  id?:number,
+  error?:boolean,
+  title?:string,
   object:T,
+  PreventiveObject?:any
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {

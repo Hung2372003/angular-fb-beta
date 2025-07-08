@@ -5,19 +5,29 @@ import { TooltipComponent } from './tooltip.component';
   providedIn: 'root'
 })
 export class TooltipService {
-
-  constructor() { }
+    private resolveReady: (() => void) | null = null;
+  private ready: Promise<void>;
+   constructor() {
+    this.ready = new Promise((resolve) => {
+      this.resolveReady = resolve;
+    });
+  }
   tooltipComponent: TooltipComponent | null = null;
 
   register(component: TooltipComponent) {
     this.tooltipComponent = component;
+    this.resolveReady?.();
+    return 'heheh'
   }
 
-  show(text: string) {
+  async show(text: string) {
+     await this.ready;
     this.tooltipComponent?.show(text);
   }
 
-  hide() {
+  async hide() {
+     await this.ready;
     this.tooltipComponent?.hide();
   }
+
 }
