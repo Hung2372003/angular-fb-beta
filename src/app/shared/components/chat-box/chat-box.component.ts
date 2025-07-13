@@ -50,7 +50,7 @@ export class ChatBoxComponent{
       this.isHiddenAction = message !== '';
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
-        if (message) {
+        if (message || this.previewFile.length > 0) {
           this.sendMessage(message, this.previewFile);
           this.chatInput.nativeElement.innerText = '';
           this.previewFile = [];
@@ -61,9 +61,6 @@ export class ChatBoxComponent{
   }
 
   sendMessage(message?: string,listFile?: Array<{file: File,url: string}>): void {
-    if(!message || message.trim() === '' && (!listFile || listFile.length === 0)){
-      return;
-    }
     this.message.emit({ content: message, files: listFile });
   }
   isSentMessage(userCode:number){
