@@ -24,6 +24,14 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-block: 0;
+  padding-inline: 0;
+
+}
+li{
+   line-height:0;
+  padding: 0;
+  margin: 0;
 }
 p{
     margin: 0;
@@ -79,6 +87,10 @@ p{
 }
 .main{
     flex-grow: 1;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 .main-content{
     display: flex;
@@ -144,4 +156,28 @@ p{
     &.received{
         @include themeReceived()
     }
+}
+
+.image-container{
+  display: flex;
+  align-items: center;
+  &.sent{
+        flex-direction: row-reverse;
+ }
+  .image{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    li{
+      flex: 1 1 calc(25% - 3px);
+      box-sizing: border-box;
+      cursor: pointer;
+      img{
+        object-fit: cover;
+        max-width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+      }
+    }
+  }
 }

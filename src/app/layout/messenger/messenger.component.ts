@@ -36,8 +36,8 @@ export class MessengerComponent implements OnInit {
     const data = await this.actionMessageAPI.listNewMessage();
     this.listNewMessage = data.object;
   }
-  sendMessage(message: string) {
-    const data = message;
+  sendMessage(message: { content?: string, files?: Array<{ file: File, url: string }> }): void {
+    const data = { content: message.content, files: message.files };
   }
   async openChat(newMessage: NewMessage){
     if(newMessage.groupChatId == this.dataChatbox.groupChatId){

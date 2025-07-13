@@ -1,4 +1,4 @@
-export interface File{
+export interface FileCommon{
     id : number;
     name:string;
     path:string;

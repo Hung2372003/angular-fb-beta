@@ -8,7 +8,6 @@
 <div
   class="message-container"
   [class.sent]="sentMessage"
-  appTooltip="uytuytuyt"
   >
   <div class="avatar" [class.sent]="sentMessage">
     <img [class.display-true]="endMessage ||( !endMessage && !startMessage ) " src="{{avatar}}" alt="">
@@ -19,6 +18,7 @@
         <p>{{name}}</p>
       </div>
     }
+
     <div class="main-content" [class.sent]="sentMessage">
       <div>
         <div class="content"
@@ -26,19 +26,20 @@
           (mouseleave)="tooltipService.hide()"
           [class.sent]="sentMessage"
           [class.received]="!sentMessage"
-          [class.start-sent]="sentMessage && startMessage"
-          [class.end-sent]="sentMessage && endMessage"
-          [class.start-received]="!sentMessage && startMessage"
-          [class.end-received]="!sentMessage && endMessage"
+          [class.start-sent]="sentMessage && ((startMessage && !endMessage) || (!startMessage && !endMessage)) "
+          [class.end-sent]="sentMessage && ((endMessage && !startMessage) || (!startMessage && !endMessage))"
+          [class.start-received]="!sentMessage && ((startMessage && !endMessage) || (!startMessage && !endMessage))"
+          [class.end-received]="!sentMessage && ((endMessage && !startMessage) || (!startMessage && !endMessage))"
           >
           <p>{{content}}</p>
-
         </div>
 
       </div>
       <div>
         <ul class="action">
-          <li class="feeling">
+          <li class="feeling"
+            (mouseenter)="tooltipService.show('Thả cảm xúc')"
+            (mouseleave)="tooltipService.hide()">
             <div><i class="fa-solid fa-face-smile"></i></div>
             <div class="list-feeling">
               <ul style="display: none;">
@@ -47,12 +48,17 @@
               </ul>
             </div>
           </li>
-          <li class="reply">
+          <li class="reply"
+            (mouseenter)="tooltipService.show('Trả lời')"
+            (mouseleave)="tooltipService.hide()">
             <div>
               <i class="fa-solid fa-share"></i>
             </div>
           </li>
-          <li class="more">
+          <li class="more"
+            (mouseenter)="tooltipService.show('Thêm hành động')"
+            (mouseleave)="tooltipService.hide()"
+          >
             <div>
               <i class="fa-regular fa-circle-ellipsis-vertical"></i>
             </div>
@@ -60,5 +66,51 @@
         </ul>
       </div>
     </div>
+     @if(listImage && listImage.length>0) {
+      <div class="image-container"  [class.sent]="sentMessage">
+          <ul class="image"
+             (mouseenter)="tooltipService.show(time)"
+             (mouseleave)="tooltipService.hide()"
+          >
+            @for (item of listImage; track $index) {
+                <li>
+                  <img [src]="item.path">
+                </li>
+            }
+          </ul>
+          <div>
+        <ul class="action">
+          <li class="feeling"
+             (mouseenter)="tooltipService.show('Thả cảm xúc')"
+             (mouseleave)="tooltipService.hide()"
+          >
+            <div><i class="fa-solid fa-face-smile"></i></div>
+            <div class="list-feeling">
+              <ul style="display: none;">
+                <li><i class="fa-solid fa-thumbs-up"></i></li>
+                <li><i class="fa-solid fa-heart"></i></li>
+              </ul>
+            </div>
+          </li>
+          <li class="reply"
+             (mouseenter)="tooltipService.show('Trả lời')"
+             (mouseleave)="tooltipService.hide()"
+          >
+            <div>
+              <i class="fa-solid fa-share"></i>
+            </div>
+          </li>
+          <li class="more"
+             (mouseenter)="tooltipService.show('Thêm hành động')"
+             (mouseleave)="tooltipService.hide()"
+          >
+            <div>
+              <i class="fa-regular fa-circle-ellipsis-vertical"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+      </div>
+    }
   </div>
 </div>

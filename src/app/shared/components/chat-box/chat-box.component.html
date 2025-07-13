@@ -1,10 +1,6 @@
 
-<header
-
->
-    <div class="title"
-
-    >
+<header>
+    <div class="title">
         <app-preview-card
             (mouseenter)="tooltipService.show(groupName ? groupName : 'ok')"
             (mouseleave)="tooltipService.hide()"
@@ -12,162 +8,115 @@
             title="{{groupName}}"
             content="đang hoạt động"
             [isRead]="true"
-            [theme]="{
-                avatarSize:'45px'
-            }"
-        >
-
-        </app-preview-card>
+            [theme]="{ avatarSize:'45px'}"
+        />
     </div>
     <div class="main-action">
         <ul>
-            <li class="call">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Gọi điện thoại"
-                    [directionTooltip]="true"
-                    [tooltipBottom]="true"
-                >
-                    <i class="fa-solid fa-phone"></i>
-                </app-button>
+            <li class="call"
+                (mouseenter)="tooltipService.show('Gọi thoại')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-phone"></i>
             </li>
-            <li class="call-video">
-
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Gọi video"
-                    [directionTooltip]="true"
-                    [tooltipBottom]="true"
-                >
-                    <i class="fa-solid fa-video"></i>
-                </app-button>
+            <li class="call-video"
+                (mouseenter)="tooltipService.show('Gọi video')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-video"></i>
             </li>
-            <li class="setting">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Cài đặt"
-                    [directionTooltip]="true"
-                    [tooltipBottom]="true"
-                >
-                    <i class="fa-solid fa-circle-exclamation"></i>
-
-                </app-button>
+            <li class="setting"
+                (mouseenter)="tooltipService.show('Cài đặt cuộc trò chuyện')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-circle-exclamation"></i>
 
             </li>
         </ul>
     </div>
 </header>
 <section>
-
-
   @for(item of listMesages;let index = $index;track $index){
         <app-message
+          [listImage]="item.listFile"
           [avatar]="setAvatar(item.createdBy)"
           [content]="item.content"
           [sentMessage]="!isSentMessage(item.createdBy)"
-          [startMessage]="setStartMessage(item,index) && !setEndMessage(item,index)"
-          [endMessage]="setEndMessage(item,index) && !setStartMessage(item,index)"
+          [startMessage]="setStartMessage(item,index)"
+          [endMessage]="setEndMessage(item,index)"
           [displayTime]="index == 0 || (listMesages && listMesages[index - 1] && !setDateOptionMessage(item.createdTime, listMesages[index - 1].createdTime)) "
-          time="{{setDate(item.createdTime)}}"
-        ></app-message>
+          time="{{setDate(item.createdTime)}}"/>
   }
 </section>
 <footer>
     <div class="extra-action">
         <ul>
-            <li [class.hidden]="!isHiddenAction" class="action">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Mở hành động khác"
-                    [directionTooltip]="true"
-                    [tooltipTop]="true"
-                >
-                        <i class="fa-solid fa-circle-plus"></i>
-                </app-button>
+            <li [class.hidden]="!isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Mở hành động khác')"
+                (mouseleave)="tooltipService.hide()" >
+                <i class="fa-solid fa-circle-plus"></i>
             </li>
-            <li [class.hidden]="isHiddenAction" class="action">
-                    <app-button
-                        class="tooltip-container"
-                        tooltip="Gửi clip âm thanh"
-                        [directionTooltip]="true"
-                        [tooltipTop]="true"
-                    >
-                         <i class="fa-solid fa-microphone"></i>
-                    </app-button>
+            <li [class.hidden]="isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Gửi clip âm thanh')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-microphone"></i>
             </li>
-            <li [class.hidden]="isHiddenAction" class="action">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Đính kèm file"
-                    [directionTooltip]="true"
-                    [tooltipTop]="true"
-                >
-                    <i class="fa-regular fa-images"></i>
-                </app-button>
+            <li [class.hidden]="isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Đính kèm file')"
+                (mouseleave)="tooltipService.hide()">
+                <label style="cursor: pointer;" for="fileInput"><i class="fa-regular fa-images"></i></label>
+                <input style="display: none;" type="file" id="fileInput" (change)="onFileSelected($event)" multiple>
             </li>
-            <li [class.hidden]="isHiddenAction" class="action">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Chọn nhãn dán"
-                    [directionTooltip]="true"
-                    [tooltipTop]="true"
-                >
-                     <i class="fa-solid fa-person-breastfeeding"></i>
-                </app-button>
+            <li [class.hidden]="isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Chọn nhãn dán')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-person-breastfeeding"></i>
             </li>
-            <li [class.hidden]="isHiddenAction" class="action">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Chọn file gif"
-                    [directionTooltip]="true"
-                    [tooltipTop]="true"
-                >
-                      <i class="fa-solid fa-gif"></i>
-                </app-button>
+            <li [class.hidden]="isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Chọn file gif')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-gif"></i>
             </li>
             <li class="input-container">
-                    <div class="input"
-                    (input)="onInput($event)"
-                    #chatInput
-                    contenteditable="true"
-                    (keydown)="onKeyDown($event)"
-                    aria-placeholder="Aa"
-                    ></div>
-                    <div style="width: 33px;flex: 0 0 auto;"></div>
-                    <div class="action feeling">
-                        <i style="position: relative;" class="fa-solid fa-face-smile">
-                             <app-button
-                                class="tooltip-container"
-                                style="position: absolute; top: 0;right: 0;height: 100%;"
-                                tooltip="Chọn cảm xúc"
-                                [directionTooltip]="true"
-                                [tooltipTop]="true"
-
-                            >
-                            </app-button>
-                        </i>
-                    </div>
+                @if(previewFile.length > 0){
+                  <div class="file-input">
+                    <ul>
+                      <li (mouseenter)="tooltipService.show('Thêm file')"
+                          (mouseleave)="tooltipService.hide()">
+                          <div class="add-file"><label for="add-file"><i class="fa-solid fa-file-plus"></i></label></div>
+                          <input style="display: none;" type="file" id="add-file" (change)="onAddFileSelected($event)" multiple>
+                      </li>
+                      @for(file of previewFile;let index = $index;track $index){
+                        <li>
+                          <img [src]="file.url">
+                          <div class="close-file" (click)="removeFile(index)"><i class="fa-solid fa-circle-xmark"></i></div>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+              }
+              <div class="text-input">
+                  <div class="input"
+                  (input)="onInput($event)"
+                  #chatInput
+                  contenteditable="true"
+                  (keydown)="onKeyDown($event)"
+                  aria-placeholder="Aa"
+                  ></div>
+                  <div style="width: 33px;flex: 0 0 auto;"></div>
+                  <div class="action feeling"
+                        (mouseenter)="tooltipService.show('Chọn biểu tượng cảm xúc')"
+                        (mouseleave)="tooltipService.hide()" >
+                      <i style="position: relative;" class="fa-solid fa-face-smile"></i>
+                  </div>
+              </div>
             </li>
-            <li [class.hidden]="isHiddenAction" class="action">
-                 <app-button
-                   class="tooltip-container"
-                    tooltip="Gửi Like"
-                    [directionTooltip]="true"
-                    [tooltipTop]="true"
-                >
-                      <i class="fa-solid fa-thumbs-up"></i>
-                </app-button>
-
+            <li [class.hidden]="isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Gửi like')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-thumbs-up"></i>
             </li>
-            <li [class.hidden]="!isHiddenAction" class="action">
-                <app-button
-                    class="tooltip-container"
-                    tooltip="Nhấn Enter để gửi"
-                    [directionTooltip]="true"
-                    [tooltipBottom]="true"
-                >
-                      <i class="fa-solid fa-paper-plane-top"></i>
-                </app-button>
+            <li [class.hidden]="!isHiddenAction" class="action"
+                (mouseenter)="tooltipService.show('Nhấp enter để gửi')"
+                (mouseleave)="tooltipService.hide()">
+                <i class="fa-solid fa-paper-plane-top"></i>
             </li>
         </ul>
     </div>

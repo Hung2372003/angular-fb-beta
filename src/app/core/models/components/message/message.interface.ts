@@ -1,4 +1,4 @@
-import { File } from "../../common/file.interface"
+import { FileCommon } from "../../common/file.interface"
 
 export interface Message {
     id:number
@@ -6,5 +6,5 @@ export interface Message {
     content:string
     createdTime:string
     fileCode:number
-    listFile:Array<File>
+    listFile:Array<FileCommon>
 }

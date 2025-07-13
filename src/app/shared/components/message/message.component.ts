@@ -1,6 +1,7 @@
 
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { TooltipService } from '../tooltip/tooltip.service';
+import { FileCommon } from '../../../core/models/common/file.interface';
 
 @Component({
   selector: 'app-message',
@@ -11,6 +12,7 @@ import { TooltipService } from '../tooltip/tooltip.service';
 export class MessageComponent implements OnInit {
   @Input() avatar!:string
   @Input() name!:string
+  @Input() listImage?:Array<FileCommon>
   @Input() content!:string
   @Input() time!:string
   @Input() sentMessage?:boolean = false

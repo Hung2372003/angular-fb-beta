@@ -1,8 +1,7 @@
-import {  Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {  Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MessageComponent } from "../message/message.component";
 import { Message } from '../../../core/models/components/message/message.interface';
 import { User } from '../../../core/models/common/user.interface';
-import { ButtonComponent } from "../button/button.component";
 import { TooltipService } from '../tooltip/tooltip.service';
 import { PreviewCardComponent } from "../preview-card/preview-card.component";
 import { DatePipe } from '@angular/common';
@@ -10,7 +9,7 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-chat-box',
-  imports: [MessageComponent, ButtonComponent, PreviewCardComponent],
+  imports: [MessageComponent, PreviewCardComponent],
   templateUrl: './chat-box.component.html',
   styleUrl: './chat-box.component.scss'
 })
@@ -36,9 +35,12 @@ export class ChatBoxComponent{
   }>;
 
   @ViewChild('chatInput') chatInput!:ElementRef
-  @Output() message = new EventEmitter<string>();
+  @Output() message = new EventEmitter<{ content?: string; files?: Array<{file: File,url: string}> }>();
+  previewFile:Array<{
+    file: File,
+    url: string
+  }>=[];
   onInput(event:Event){
-
   }
 
   isHiddenAction:boolean=false;
@@ -47,18 +49,22 @@ export class ChatBoxComponent{
       const message = this.chatInput.nativeElement.innerText.trim();
       this.isHiddenAction = message !== '';
       if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault(); // Ngăn xuống dòng
+        event.preventDefault();
         if (message) {
-          this.sendMessage(message);
+          this.sendMessage(message, this.previewFile);
           this.chatInput.nativeElement.innerText = '';
+          this.previewFile = [];
           this.isHiddenAction = false;
         }
       }
     });
   }
 
-  sendMessage(message: string): void {
-   this.message.emit(message);
+  sendMessage(message?: string,listFile?: Array<{file: File,url: string}>): void {
+    if(!message || message.trim() === '' && (!listFile || listFile.length === 0)){
+      return;
+    }
+    this.message.emit({ content: message, files: listFile });
   }
   isSentMessage(userCode:number){
     const check = this.listUser?.some(x => x.userCode == userCode)
@@ -88,7 +94,7 @@ export class ChatBoxComponent{
       }
     else return  this.datePipe.transform(time, 'h:MM (d ') + 'Tháng' + this.datePipe.transform(time, ' M, yyyy)')
   }
-  setDateOptionMessage(timeData1:string ,timeData2:string){
+  setDateOptionMessage(timeData1:string ,timeData2?:string){
     let time1 =new Date((new Date(timeData1)).getTime() + 7 * 60 * 60 * 1000);
     if(timeData2 == '' || timeData2 == null){
       timeData2 = (new Date()).toString();
@@ -97,7 +103,7 @@ export class ChatBoxComponent{
     let differenceInMilliseconds = Math.abs(time1.getTime() - time2.getTime());
     let differenceInSeconds = differenceInMilliseconds / 1000;
     let differenceInMinutes = Math.round(differenceInSeconds / 60);
-    if(differenceInMinutes < 20) return true
+    if(differenceInMinutes < 20){ return true}
     return false
   }
   setAvatar(userCode:number){
@@ -106,21 +112,50 @@ export class ChatBoxComponent{
     return "";
   }
   setStartMessage(item: Message, index:number){
-    if(index == 0) return true;
+    // if(index == 0) return true;
     if(this.listMesages ){
-            if(item.createdBy != this.listMesages[index-1].createdBy ||
+            if(item.createdBy != this.listMesages[index-1]?.createdBy ||
                !this.setDateOptionMessage(item.createdTime,this.listMesages[index -1].createdTime)
             ) return true;
     }
     return false
   }
   setEndMessage(item: Message, index:number){
-    if(index +1 == this.listMesages?.length) return true
+    // if(index +1 == this.listMesages?.length) return true
     if(this.listMesages){
-      if((item.createdBy != this.listMesages[index +1].createdBy) ||
+      if((item.createdBy != this.listMesages[index +1]?.createdBy) ||
           !this.setDateOptionMessage(item.createdTime,this.listMesages[index + 1].createdTime)
         ) return true
     }
     return false
+  }
+  onFileSelected(event:Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+     const files = Array.from(input.files);
+    const filesWithPreview = files.map(file => ({
+      file,
+      url: URL.createObjectURL(file)
+    }));
+    this.previewFile = filesWithPreview;
+    }
+    input.value = '';
+
+  }
+  onAddFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const files = Array.from(input.files);
+      const filesWithPreview = files.map(file => ({
+        file,
+        url: URL.createObjectURL(file)
+      }));
+      this.previewFile.push(...filesWithPreview);
+    }
+    input.value = '';
+
+  }
+  removeFile(index: number): void {
+    this.previewFile.splice(index, 1);
   }
 }
