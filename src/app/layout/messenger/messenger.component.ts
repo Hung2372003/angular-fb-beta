@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChatHistoryComponent } from '../../shared/components/chat-history/chat-history.component';
 import { ChatBoxComponent } from '../../shared/components/chat-box/chat-box.component';
 import { CallApiService } from '../../core/services/call-api.service';
@@ -8,6 +8,13 @@ import { Message } from '../../core/models/components/message/message.interface'
 import { User } from '../../core/models/common/user.interface';
 import { TooltipComponent } from "../../shared/components/tooltip/tooltip.component";
 
+interface DataChatbox {
+  groupChatId?: number;
+  groupAvatar?: string;
+  groupName?: string;
+  listMessage?: Array<Message>;
+  listUser?: Array<User>;
+}
 @Component({
   selector: 'app-messenger',
   imports: [ChatHistoryComponent, ChatBoxComponent, TooltipComponent],
@@ -24,14 +31,9 @@ export class MessengerComponent implements OnInit {
     this.chatBoxManagementAPI = buildChatBoxManagementAPI(this.CallApiService);
   }
 
-  listNewMessage:Array<NewMessage> = []
-  dataChatbox:{
-    groupChatId?:number,
-    groupAvatar?:string,
-    groupName?:string,
-    listMessage?:Array<Message>,
-    listUser?:Array<User>,
-  } = {}
+  listNewMessage: Array <NewMessage> = []
+  listDataChatBox: Array <DataChatbox> = []
+  dataChatbox: DataChatbox = {}
   async ngOnInit(): Promise<void> {
     const data = await this.actionMessageAPI.listNewMessage();
     this.listNewMessage = data.object;
@@ -40,15 +42,21 @@ export class MessengerComponent implements OnInit {
     const data = { content: message.content, files: message.files };
   }
   async openChat(newMessage: NewMessage){
-    if(newMessage.groupChatId == this.dataChatbox.groupChatId){
-       return
+    if(newMessage.groupChatId == this.dataChatbox.groupChatId ) return;
+    if(this.listDataChatBox.some(chatBox => chatBox.groupChatId == newMessage.groupChatId)) {
+      this.dataChatbox = this.listDataChatBox.find(chatBox => chatBox.groupChatId == newMessage.groupChatId) || {};
+      return;
     }
     await this.actionMessageAPI.setStatusReadMessage(newMessage.groupChatId)
     const data = await this.chatBoxManagementAPI.createChatBox({groupChatId:newMessage.groupChatId})
-    this.dataChatbox.listMessage = data.object
-    this.dataChatbox.groupChatId = newMessage.groupChatId
-    this.dataChatbox.groupAvatar = newMessage.groupAvatar
-    this.dataChatbox.groupName = newMessage.groupName
-    this.dataChatbox.listUser = newMessage.listUser
+    const newChatBox: DataChatbox = {
+    groupChatId: newMessage.groupChatId,
+    groupAvatar: newMessage.groupAvatar,
+    groupName: newMessage.groupName,
+    listUser: newMessage.listUser,
+    listMessage: data.object,
+    };
+    this.dataChatbox = newChatBox;
+    this.listDataChatBox.push(this.dataChatbox);
   }
 }
