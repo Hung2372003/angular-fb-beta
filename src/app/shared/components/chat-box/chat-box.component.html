@@ -1,4 +1,3 @@
-
 <header>
     <div class="title">
         <app-preview-card
@@ -27,7 +26,6 @@
                 (mouseenter)="tooltipService.show('Cài đặt cuộc trò chuyện')"
                 (mouseleave)="tooltipService.hide()">
                 <i class="fa-solid fa-circle-exclamation"></i>
-
             </li>
         </ul>
     </div>
@@ -86,7 +84,10 @@
                       @for(file of previewFile;let index = $index;track $index){
                         <li>
                           <img [src]="file.url">
-                          <div class="close-file" (click)="removeFile(index)"><i class="fa-solid fa-circle-xmark"></i></div>
+                          <div class="close-file" (click)="removeFile(index)"
+                            (mouseenter)="tooltipService.show('Gỡ file đính kèm')"
+                            (mouseleave)="tooltipService.hide()">
+                            <i class="fa-solid fa-circle-xmark"></i></div>
                         </li>
                       }
                     </ul>
@@ -120,5 +121,4 @@
             </li>
         </ul>
     </div>
-
 </footer>
