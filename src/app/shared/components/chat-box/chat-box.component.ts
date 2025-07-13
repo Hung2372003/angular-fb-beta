@@ -5,11 +5,12 @@ import { User } from '../../../core/models/common/user.interface';
 import { TooltipService } from '../tooltip/tooltip.service';
 import { PreviewCardComponent } from "../preview-card/preview-card.component";
 import { DatePipe } from '@angular/common';
+import { ActionsMenuComponent } from "../actions-menu/actions-menu.component";
 
 
 @Component({
   selector: 'app-chat-box',
-  imports: [MessageComponent, PreviewCardComponent],
+  imports: [MessageComponent, PreviewCardComponent, ActionsMenuComponent],
   templateUrl: './chat-box.component.html',
   styleUrl: './chat-box.component.scss'
 })
@@ -40,10 +41,25 @@ export class ChatBoxComponent{
     file: File,
     url: string
   }>=[];
-  onInput(event:Event){
+  isHiddenListAction:boolean = false;
+  listMenu:Array<{
+    icon: string;
+    label: string;
+    groupId?: number;
+    action?: () => void | undefined;
+  }> = [
+    { icon: 'fa-solid fa-microphone', label: 'Gửi clip âm thanh'},
+    { icon: 'fa-regular fa-images', label: 'Đính kèm file', action: () => this.triggerFileInput()},
+    { icon: 'fa-solid fa-person-breastfeeding', label: 'Chọn nhãn dán',},
+    { icon:'fa-solid fa-gif', label: 'Chọn file GIF'}
+  ];
+  isHiddenAction:boolean=false;
+
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+  triggerFileInput() {
+    this.fileInputRef.nativeElement.click();
   }
 
-  isHiddenAction:boolean=false;
   async onKeyDown(event: KeyboardEvent): Promise<void> {
     setTimeout(() => {
       const message = this.chatInput.nativeElement.innerText.trim();
@@ -63,6 +79,7 @@ export class ChatBoxComponent{
   sendMessage(message?: string,listFile?: Array<{file: File,url: string}>): void {
     this.message.emit({ content: message, files: listFile });
   }
+
   isSentMessage(userCode:number){
     const check = this.listUser?.some(x => x.userCode == userCode)
     if(check != undefined){
@@ -70,6 +87,7 @@ export class ChatBoxComponent{
     }
     return false;
   }
+
   setDate(timeData:string){
     let time =new Date((new Date(timeData)).getTime() + 7 * 60 * 60 * 1000);
     let timeNow=new Date();
@@ -91,6 +109,7 @@ export class ChatBoxComponent{
       }
     else return  this.datePipe.transform(time, 'h:MM (d ') + 'Tháng' + this.datePipe.transform(time, ' M, yyyy)')
   }
+
   setDateOptionMessage(timeData1:string ,timeData2?:string){
     let time1 =new Date((new Date(timeData1)).getTime() + 7 * 60 * 60 * 1000);
     if(timeData2 == '' || timeData2 == null){
@@ -103,13 +122,14 @@ export class ChatBoxComponent{
     if(differenceInMinutes < 20){ return true}
     return false
   }
+
   setAvatar(userCode:number){
     const data = this.listUser?.filter(user => user.userCode == userCode)[0]?.avatar
     if(data) return data
     return "";
   }
+
   setStartMessage(item: Message, index:number){
-    // if(index == 0) return true;
     if(this.listMesages ){
             if(item.createdBy != this.listMesages[index-1]?.createdBy ||
                !this.setDateOptionMessage(item.createdTime,this.listMesages[index -1].createdTime)
@@ -117,8 +137,8 @@ export class ChatBoxComponent{
     }
     return false
   }
+
   setEndMessage(item: Message, index:number){
-    // if(index +1 == this.listMesages?.length) return true
     if(this.listMesages){
       if((item.createdBy != this.listMesages[index +1]?.createdBy) ||
           !this.setDateOptionMessage(item.createdTime,this.listMesages[index + 1].createdTime)
@@ -139,6 +159,7 @@ export class ChatBoxComponent{
     input.value = '';
 
   }
+
   onAddFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -152,7 +173,12 @@ export class ChatBoxComponent{
     input.value = '';
 
   }
+
   removeFile(index: number): void {
     this.previewFile.splice(index, 1);
+  }
+  getUserName(userCode: number): string {
+    const user = this.listUser?.find(u => u.userCode === userCode);
+    return user ? user.name || '' : '';
   }
 }

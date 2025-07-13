@@ -11,7 +11,7 @@ import { FileCommon } from '../../../core/models/common/file.interface';
 })
 export class MessageComponent implements OnInit {
   @Input() avatar!:string
-  @Input() name!:string
+  @Input() name?:string
   @Input() listImage?:Array<FileCommon>
   @Input() content!:string
   @Input() time!:string

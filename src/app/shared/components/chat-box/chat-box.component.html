@@ -33,6 +33,7 @@
 <section>
   @for(item of listMesages;let index = $index;track $index){
         <app-message
+          [name]="getUserName(item.createdBy)"
           [listImage]="item.listFile"
           [avatar]="setAvatar(item.createdBy)"
           [content]="item.content"
@@ -46,10 +47,14 @@
 <footer>
     <div class="extra-action">
         <ul>
-            <li [class.hidden]="!isHiddenAction" class="action"
+            <li [class.hidden]="!isHiddenAction" class="action" style="position: relative;"
                 (mouseenter)="tooltipService.show('Mở hành động khác')"
-                (mouseleave)="tooltipService.hide()" >
+                (mouseleave)="tooltipService.hide()"
+                (click)="isHiddenListAction = !isHiddenListAction">
                 <i class="fa-solid fa-circle-plus"></i>
+                <app-actions-menu class="top right" [theme]="{iconColor:'#3653E8'}"
+                                  [listMenu]="listMenu" (mouseenter)="tooltipService.hide()"
+                                  [class.hidden]="!isHiddenListAction"/>
             </li>
             <li [class.hidden]="isHiddenAction" class="action"
                 (mouseenter)="tooltipService.show('Gửi clip âm thanh')"
@@ -59,7 +64,7 @@
             <li [class.hidden]="isHiddenAction" class="action"
                 (mouseenter)="tooltipService.show('Đính kèm file')"
                 (mouseleave)="tooltipService.hide()">
-                <label style="cursor: pointer;" for="fileInput"><i class="fa-regular fa-images"></i></label>
+                <label #fileInput style="cursor: pointer;" for="fileInput"><i class="fa-regular fa-images"></i></label>
                 <input style="display: none;" type="file" id="fileInput" (change)="onFileSelected($event)" multiple>
             </li>
             <li [class.hidden]="isHiddenAction" class="action"
@@ -95,7 +100,6 @@
               }
               <div class="text-input">
                   <div class="input"
-                  (input)="onInput($event)"
                   #chatInput
                   contenteditable="true"
                   (keydown)="onKeyDown($event)"

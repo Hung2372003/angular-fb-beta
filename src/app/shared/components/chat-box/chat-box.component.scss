@@ -58,7 +58,6 @@ header{
             background:var(--actionHoverColor);
         }
     }
-
 }
 
 section{
@@ -68,7 +67,6 @@ section{
 }
 
 footer{
-    // flex: 1 1 auto;
     display: flex;
     align-items: center;
     padding: 10px 3px;
@@ -116,15 +114,12 @@ footer{
             background: var(--backgroupInputColor);
             border-radius: 20px;
             box-sizing: border-box;
-            // padding: 7px 0px;
             width: 0;
             gap: 7px;
             .file-input{
-              // height: 70px;
               padding: 0px 10px;
               border-radius: 10px;
               width: 100%;
-
               ul{
                 width: 100%;
                 flex: 1 0 auto;
@@ -137,13 +132,11 @@ footer{
                   box-sizing: border-box;
                    white-space: nowrap;
                    padding-top: 10px;
-
                 li{
                   flex: 0 0 auto;
                   height: 100%;
                   box-sizing: border-box;
                   position: relative;
-
                   .close-file{
                       position: absolute;
                       top: -10%;
@@ -182,10 +175,8 @@ footer{
                  align-items: center;
                  padding: 5px 0;
                .input{
-                // position: relative;
                 display: flex;
-                // align-items: center;
-                 align-items: flex-start;
+                align-items: flex-start;
                 height: 100%;
                 flex: 1 1 auto;
                 border: none;
@@ -214,12 +205,8 @@ footer{
                     bottom: 0;
                 }
             }
-
         }
-
-
     }
-
 }
 
 .hidden{

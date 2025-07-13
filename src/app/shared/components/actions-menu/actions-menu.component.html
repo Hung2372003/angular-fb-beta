@@ -1,1 +1,8 @@
-<p>actions-menu works!</p>
+<ul>
+  @for (item of listMenu; track $index) {
+    <li (click)="item.action && item.action()">
+      @if(item.icon){ <i class="{{ item.icon }} icon"></i> }
+      <span class="text">{{ item.label }}</span>
+    </li>
+  }
+</ul>

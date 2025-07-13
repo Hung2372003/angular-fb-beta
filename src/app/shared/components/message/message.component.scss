@@ -57,11 +57,12 @@ p{
 }
 
 .name{
-    padding: 7px;
+    padding: 5px 7px;
     color: var(--extraColor);
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     align-items: center;
+    font-weight: 400;
     &.sent{
         flex-direction: row-reverse;
  }
