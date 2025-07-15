@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { LoadingService } from './../../core/services/loading.service';
+import { SignalRService } from './../../core/services/signal-r.service';
+import { ChatService } from './../../core/services/chat.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChatHistoryComponent } from '../../shared/components/chat-history/chat-history.component';
 import { ChatBoxComponent } from '../../shared/components/chat-box/chat-box.component';
 import { CallApiService } from '../../core/services/call-api.service';
@@ -26,6 +29,9 @@ export class MessengerComponent implements OnInit {
   private chatBoxManagementAPI: ReturnType<typeof buildChatBoxManagementAPI>
   constructor(
     private CallApiService:CallApiService,
+    private ChatService: ChatService,
+    private SignalRService: SignalRService,
+    private LoadingService: LoadingService
   ){
     this.actionMessageAPI = buildActionMessageAPI(this.CallApiService);
     this.chatBoxManagementAPI = buildChatBoxManagementAPI(this.CallApiService);
@@ -34,22 +40,85 @@ export class MessengerComponent implements OnInit {
   listNewMessage: Array <NewMessage> = []
   listDataChatBox: Array <DataChatbox> = []
   dataChatbox: DataChatbox = {}
+  listUserOnline: Array<string> = [];
   async ngOnInit(): Promise<void> {
+    await this.SignalRService.startConnection();
+    this.LoadingService.show();
+    await this.getNewMessage();
+    this.listNewMessage.forEach(async newMessage => {
+     await this.SignalRService.joinGroup('groupChat_' + newMessage.groupChatId.toString());
+    })
+    this.SignalRService.onReceiveMessage((groupId, content, userCode, listFile) => {
+      if (groupId) {
+        groupId = groupId.replace('groupChat_', '');
+        this.listDataChatBox.forEach(chatBox => {
+          if (chatBox.groupChatId == parseInt(groupId as string)) {
+            const newMessage: Message = {
+              id: listFile && listFile[0]?.messId ? listFile[0].messId : 0,
+              content: content || '',
+              createdBy: parseInt(userCode ?? '0'),
+              listFile: listFile || [],
+              createdTime: (new Date((new Date()).getTime() - 7 * 60 * 60 * 1000)).toString(),
+            };
+            chatBox.listMessage = [...(chatBox.listMessage ?? []), newMessage];
+            this.listNewMessage = this.listNewMessage.map(item => {
+              if (item.groupChatId == chatBox.groupChatId) {
+                return {
+                  ...item,
+                  newMessage: {
+                    ...item.newMessage,
+                    content: newMessage.content ?? '',
+                    createdTime: newMessage.createdTime,
+                  },
+                  status: newMessage.createdBy != parseInt(localStorage.getItem('userCode') ?? '0') ? false : true,
+                } as NewMessage;
+              }
+              return item as NewMessage;
+            });
+          }
+        });
+      }
+    });
+    this.SignalRService.onListUserOnline((listUserOnline: Array<string>) => {
+      this.listUserOnline = listUserOnline;
+    });
+    this.LoadingService.hide();
+  }
+
+  async getNewMessage(): Promise<void> {
     const data = await this.actionMessageAPI.listNewMessage();
-    this.listNewMessage = data.object;
+    await (this.listNewMessage = data.object);
   }
-  sendMessage(message: { content?: string, files?: Array<{ file: File, url: string }> }): void {
-    const data = { content: message.content, files: message.files };
+
+  async sendMessage(message: { groupChatId?: number , content?: string, files?: Array<{ file: File, url: string }> }): Promise<void> {
+    await this.ChatService.addNewMessageToGroupChat({
+      groupChatId: message.groupChatId ?? 0,
+      content: message.content,
+      files: message.files
+    });
   }
+
   async openChat(newMessage: NewMessage){
+    if(newMessage.status == false && newMessage.newMessage.createdBy != parseInt(localStorage.getItem('userCode') ?? '0')) {
+        await this.actionMessageAPI.setStatusReadMessage(newMessage.groupChatId)
+        newMessage.status = true;
+        this.listNewMessage = this.listNewMessage.map(item => {
+          if (item.groupChatId == newMessage.groupChatId) {
+            return {
+              ...item,
+              status: true,
+            } as NewMessage;
+          }
+          return item as NewMessage;
+        });
+    }
     if(newMessage.groupChatId == this.dataChatbox.groupChatId ) return;
     if(this.listDataChatBox.some(chatBox => chatBox.groupChatId == newMessage.groupChatId)) {
       this.dataChatbox = this.listDataChatBox.find(chatBox => chatBox.groupChatId == newMessage.groupChatId) || {};
       return;
     }
-    await this.actionMessageAPI.setStatusReadMessage(newMessage.groupChatId)
     const data = await this.chatBoxManagementAPI.createChatBox({groupChatId:newMessage.groupChatId})
-    const newChatBox: DataChatbox = {
+     const newChatBox: DataChatbox = await {
     groupChatId: newMessage.groupChatId,
     groupAvatar: newMessage.groupAvatar,
     groupName: newMessage.groupName,

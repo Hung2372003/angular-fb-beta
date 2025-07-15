@@ -2,20 +2,21 @@
 <app-chat-history
   [listNewMessage]="listNewMessage"
   (openChat)="openChat($event)"
+  [listUserOnline]="listUserOnline"
 ></app-chat-history>
-@if(dataChatbox.groupChatId){
   <app-chat-box
+    [class.hidden-chatbox]="!dataChatbox.groupChatId"
     [groupAvater]="dataChatbox.groupAvatar"
     [groupChatId]="dataChatbox.groupChatId"
     [groupName]="dataChatbox.groupName"
     [listMesages]="dataChatbox.listMessage"
     [listUser]="dataChatbox.listUser"
     (message)="sendMessage($event)"
+    [listUserOnline]="listUserOnline"
 ></app-chat-box>
-} @else{
-  <div class="content">
-      <div>Hãy bắt đầu đoạn chát của bạn</div>
-  </div>
+<div [class.hidden-chatbox]="dataChatbox.groupChatId" class="content">
+    <div>Hãy bắt đầu đoạn chát của bạn</div>
+</div>
 
-}
+
 

@@ -12,10 +12,10 @@ export class PreviewCardComponent implements OnInit{
   @Input() avatar!:string
   @Input() title!:string
   @Input() content!:string
-  @Input() time!:string
-  @Input() isOnline!:boolean
+  @Input() time?:string
+  @Input() isOnline?:boolean = false
   @Input() isRead!:boolean
-  @Input() notifi!:boolean
+  @Input() notifi?:boolean = false
   @Input() theme?: Partial<{
     // hoverBackgroundColor?: string;
     backgroundColor?: string;

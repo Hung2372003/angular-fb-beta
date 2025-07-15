@@ -12,10 +12,15 @@ import { NewMessage } from '../../../core/models/api/list-new-message.api.interf
 export class ChatHistoryComponent implements OnInit {
   @Input() listNewMessage!: Array<NewMessage>
   @Output() openChat = new EventEmitter<NewMessage>
-  @Input() listUserOnline?: Array<User>
+  @Input() listUserOnline?: Array<string> = [];
   ngOnInit(): void {
   }
-  checkOnline(data:Array<User>){}
+  checkOnline(data:Array<User>){
+    if(this.listUserOnline && this.listUserOnline.length>0){
+      return data.some(x => this.listUserOnline?.includes(x.userCode.toString()));
+    }
+    return false;
+  }
   setDate(timeData:string){
     let time =new Date(timeData);
     let timeNow=new Date();

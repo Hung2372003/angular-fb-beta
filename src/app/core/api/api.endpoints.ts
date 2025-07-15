@@ -6,6 +6,7 @@ import { LoginRequest } from '../models/api/login.api.interface';
 import { ApiResponse } from '../models/api/common-response.api.interface';
 import { NewMessage } from '../models/api/list-new-message.api.interface';
 import { Message } from '../models/components/message/message.interface';
+import { AddNewMessageRequest } from '../models/api/add-new-mesage.api.interface';
 
 export const buildAuthAPI = (api: CallApiService) => ({
   login: (data: LoginRequest): Promise<ApiResponse<object>> =>
@@ -40,4 +41,15 @@ export const buildActionMessageAPI = (api: CallApiService) => ({
 export const buildChatBoxManagementAPI = (api: CallApiService) => ({
   createChatBox: (data:CreateChatBoxReponse): Promise<ApiResponse<Array<Message>>> =>
     api.callApi<ApiResponse<Array<Message>>>('ChatBox/CreateWindowChat', 'post',data),
+  addNewMessage: (data:AddNewMessageRequest): Promise<ApiResponse<Array<object>>> =>{
+      const fromData = new FormData();
+      if (data.files) {
+        data.files.forEach(fileItem => {
+          fromData.append('fileUpload', fileItem.file);
+        });
+      }
+      fromData.append('groupChatId', data.groupChatId.toString());
+      fromData.append('content', data.content || '');
+    return api.callApi<ApiResponse<Array<object>>>('ChatBox/AddNewMessage', 'post', fromData);
+  }
 });

@@ -2,10 +2,11 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { TooltipService } from '../tooltip/tooltip.service';
 import { FileCommon } from '../../../core/models/common/file.interface';
+import { PreviewCardComponent } from "../preview-card/preview-card.component";
 
 @Component({
   selector: 'app-message',
-  imports: [],
+  imports: [PreviewCardComponent],
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
@@ -19,6 +20,8 @@ export class MessageComponent implements OnInit {
   @Input() startMessage?:boolean = false
   @Input() endMessage?:boolean  = false
   @Input() displayTime?:boolean  = false
+  @Input() listUserOnline?: Array<string> = [];
+  @Input() userCode?:number ;
   @Input() theme!:{
     messageSentBackgroundColor:string
     messageReceivedBackgroundColor:string
@@ -68,5 +71,11 @@ export class MessageComponent implements OnInit {
     Object.entries(variables).forEach(([key, value]) => {
       el.style.setProperty(key, value);
     });
+  }
+  checkOnline(): boolean {
+    if (this.listUserOnline && this.listUserOnline.length > 0) {
+      return this.listUserOnline.includes(this.userCode?.toString() ?? '');
+    }
+    return false;
   }
 }

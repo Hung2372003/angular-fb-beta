@@ -5,7 +5,7 @@ import { LoadingService } from '../services/loading.service'; // đổi đườn
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const loadingService = inject(LoadingService);
-  loadingService.show();
+  // loadingService.show();
 
   return next(req).pipe(
     finalize(() => loadingService.hide())

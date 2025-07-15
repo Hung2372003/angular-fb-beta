@@ -1,4 +1,4 @@
-import {  Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {  AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MessageComponent } from "../message/message.component";
 import { Message } from '../../../core/models/components/message/message.interface';
 import { User } from '../../../core/models/common/user.interface';
@@ -6,7 +6,7 @@ import { TooltipService } from '../tooltip/tooltip.service';
 import { PreviewCardComponent } from "../preview-card/preview-card.component";
 import { DatePipe } from '@angular/common';
 import { ActionsMenuComponent } from "../actions-menu/actions-menu.component";
-
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat-box',
@@ -14,16 +14,20 @@ import { ActionsMenuComponent } from "../actions-menu/actions-menu.component";
   templateUrl: './chat-box.component.html',
   styleUrl: './chat-box.component.scss'
 })
-export class ChatBoxComponent{
+export class ChatBoxComponent implements OnChanges, AfterViewInit {
   constructor(
     public tooltipService:TooltipService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private ngZone: NgZone
+
   ){}
  @Input() groupChatId?:number
  @Input() listMesages?:Array<Message> = []
  @Input() groupName?:string
  @Input() groupAvater?:string
  @Input() listUser?:Array<User> = []
+ @Input() shouldScrollToBottom: boolean = true;
+ @Input() listUserOnline?: Array<string> = [];
  @Input() theme?:Partial<{
     // hoverBackgroundColor?: string;
     backgroundColor?: string;
@@ -35,8 +39,9 @@ export class ChatBoxComponent{
     avatarSize?: string;
   }>;
 
-  @ViewChild('chatInput') chatInput!:ElementRef
-  @Output() message = new EventEmitter<{ content?: string; files?: Array<{file: File,url: string}> }>();
+  @ViewChild('chatInput') chatInput!:ElementRef;
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @Output() message = new EventEmitter<{ groupChatId?: number; content?: string; files?: Array<{file: File,url: string}> }>();
   previewFile:Array<{
     file: File,
     url: string
@@ -54,8 +59,22 @@ export class ChatBoxComponent{
     { icon:'fa-solid fa-gif', label: 'Chọn file GIF'}
   ];
   isHiddenAction:boolean=false;
-
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+  ngAfterViewInit(): void {
+
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['listMesages'] && this.shouldScrollToBottom) {
+        setTimeout(() => {
+          this.scrollToBottom();
+      },500);
+    }
+  }
+  scrollToBottom(): void {
+    if (this.scrollContainer?.nativeElement) {
+      this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
   triggerFileInput() {
     this.fileInputRef.nativeElement.click();
   }
@@ -77,7 +96,7 @@ export class ChatBoxComponent{
   }
 
   sendMessage(message?: string,listFile?: Array<{file: File,url: string}>): void {
-    this.message.emit({ content: message, files: listFile });
+    this.message.emit({groupChatId: this.groupChatId, content: message, files: listFile });
   }
 
   isSentMessage(userCode:number){
@@ -180,5 +199,11 @@ export class ChatBoxComponent{
   getUserName(userCode: number): string {
     const user = this.listUser?.find(u => u.userCode === userCode);
     return user ? user.name || '' : '';
+  }
+  checkOnline(listUserOnline?: Array<string>): boolean {
+    if (listUserOnline && listUserOnline.length > 0) {
+      return this.listUser?.some(user => listUserOnline.includes(user.userCode.toString())) ?? false;
+    }
+    return false;
   }
 }

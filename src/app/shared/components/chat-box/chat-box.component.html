@@ -5,9 +5,10 @@
             (mouseleave)="tooltipService.hide()"
             avatar="{{groupAvater}}"
             title="{{groupName}}"
-            content="đang hoạt động"
+            [content]="checkOnline(listUserOnline) ? 'Đang hoạt động' : ''"
             [isRead]="true"
             [theme]="{ avatarSize:'45px'}"
+            [isOnline]="checkOnline(listUserOnline)"
         />
     </div>
     <div class="main-action">
@@ -30,18 +31,22 @@
         </ul>
     </div>
 </header>
-<section>
+<section #scrollContainer style=" scroll-behavior: smooth;">
   @for(item of listMesages;let index = $index;track $index){
         <app-message
-          [name]="getUserName(item.createdBy)"
+          #message
+          [name]="(isSentMessage(item.createdBy) && setStartMessage(item,index)  ) ? getUserName(item.createdBy) : undefined"
           [listImage]="item.listFile"
-          [avatar]="setAvatar(item.createdBy)"
-          [content]="item.content"
+          [avatar]="setEndMessage(item,index) ? setAvatar(item.createdBy) : ''"
+          [content]="item.content ?? ''"
           [sentMessage]="!isSentMessage(item.createdBy)"
           [startMessage]="setStartMessage(item,index)"
           [endMessage]="setEndMessage(item,index)"
           [displayTime]="index == 0 || (listMesages && listMesages[index - 1] && !setDateOptionMessage(item.createdTime, listMesages[index - 1].createdTime)) "
-          time="{{setDate(item.createdTime)}}"/>
+          time="{{setDate(item.createdTime)}}"
+          [userCode]="item.createdBy"
+          [listUserOnline]="listUserOnline"
+        />
   }
 </section>
 <footer>

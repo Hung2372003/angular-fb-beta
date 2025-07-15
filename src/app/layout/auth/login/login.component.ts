@@ -1,3 +1,4 @@
+import { SignalRService } from './../../../core/services/signal-r.service';
 import { RegisterRequest } from './../../../core/models/api/register.api.interface';
 import {  AfterViewInit, Component, OnInit } from '@angular/core';
 import {  FormControl, FormGroup, Validators, ReactiveFormsModule  } from '@angular/forms';
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private ApiService:CallApiService,
     private loadingService:LoadingService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private SignalRService:SignalRService
 
   ) {
     this.authAPI = buildAuthAPI(this.ApiService);
@@ -68,6 +70,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (code) {
           let data = await this.authAPI.googleExchangeCodeLogin({ code: code });
           this.alert.show(data.title,'success',4000,Date.now())
+          await this.SignalRService.startConnection();
+          if (data.id !== undefined && data.id !== null) {
+            localStorage.setItem('userCode', data.id.toString());
+          }
           this.router.navigate(['/messenger']);
       }
     else {
@@ -160,7 +166,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     let message = await this.authAPI.register(dataRequest)
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
     if(message.error == false){
-       this.router.navigate(['/messenger']);
+      if (message.id !== undefined && message.id !== null) {
+        localStorage.setItem('userCode', message.id.toString());
+      }
+      this.router.navigate(['/messenger']);
     }
   }
   async onSubmitLogin(){
@@ -174,6 +183,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     let message = await this.authAPI.login(this.authLoginForm.getRawValue())
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
     if(message.error==false){
+     await this.SignalRService.startConnection();
           this.router.navigate(['/messenger']);
     }
   }

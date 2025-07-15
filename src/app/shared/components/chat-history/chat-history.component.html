@@ -20,6 +20,7 @@
         [content]="item.newMessage.content"
         [isRead]="item.status"
         [time]="setDate(item.newMessage.createdTime)"
+        [isOnline]="checkOnline(item.listUser)"
       ></app-preview-card>
     }
   </div>
