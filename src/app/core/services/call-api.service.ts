@@ -2,7 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
-import { map, timeout } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ErrorHandlingService } from './error-handling.service';
 import { environment } from '../../../environments/environment';
 import { LoadingService } from './loading.service';
@@ -31,7 +31,7 @@ export class CallApiService {
       throw new Error('API calls are not supported in server-side rendering');
     }
 
-    const url = `${this.hostUrlApi}/${endpoint}`;
+    const url = `${this.hostUrlApi}/api/${endpoint}`;
     const m = method.toLowerCase();
     const options: any = {};
 
@@ -53,7 +53,6 @@ export class CallApiService {
         throw new Error(`Unsupported HTTP method: ${method}`);
     }
 
-    this.loadingService.show();
     try {
 
       const request$ = this.http.request<T>(m, url, options).pipe(
@@ -64,7 +63,7 @@ export class CallApiService {
       this.errorHandlingService.handleError(error as HttpErrorResponse);
       throw error;
     } finally {
-      this.loadingService.hide();
+      // this.loadingService.hide();
     }
   }
 }
