@@ -188,8 +188,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
     let message = await this.authAPI.login(this.authLoginForm.getRawValue())
     this.alert.show(message.title,message.error == true ? 'error':'success',3000,Date.now())
     if(message.error==false){
-     await this.SignalRService.startConnection();
-          this.router.navigate(['/messenger']);
+      if (message.id !== undefined && message.id !== null) {
+          localStorage.setItem('userCode', message.id.toString());
+      }
+      await this.SignalRService.startConnection();
+      this.router.navigate(['/messenger']);
     }
     this.loadingService.hide();
   }

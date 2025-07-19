@@ -67,6 +67,7 @@ export class MessengerComponent implements OnInit {
 }
   async ngOnInit(): Promise<void> {
     this.personalInformation = (await this.personalActionAPI.getPersonalInformation({userCode: parseInt(localStorage.getItem('userCode') ?? '0')})).object;
+
     await this.SignalRService.startConnection();
     this.LoadingService.show();
     await this.getNewMessage();
