@@ -1,10 +1,28 @@
 <app-tooltip></app-tooltip>
+<div class="menu" [style]="{ width: !isToggleMenu ? 'fit-content' : '' }">
+  <app-actions-menu [listMenu]="listMenuItem"
+                    [theme]="{iconColor: 'black', backgroundColor: '#ffffff00', boxShadowColor: '#fdfdfd01'}"
+                    [isLabel]="isToggleMenu"
+                    />
+  <div class="menu-infor" [class.hidden-content]="!isToggleMenu">
+    <app-preview-card
+      [avatar]="personalInformation?.avatar || ''"
+      [title]="isToggleMenu ? personalInformation?.name || '' : ''"
+      [theme]="{ avatarSize: '35px' }"
+    />
+    <div (click)="toggleMenu()" class="menu-blinds"><i class="fa-regular fa-blinds-open"></i></div>
+  </div>
+</div>
+
 <app-chat-history
+  class="chat-history"
   [listNewMessage]="listNewMessage"
   (openChat)="openChat($event)"
   [listUserOnline]="listUserOnline"
 ></app-chat-history>
   <app-chat-box
+    class="chat-box"
+    (click)="clickChatBox(dataChatbox.groupChatId)"
     [class.hidden-chatbox]="!dataChatbox.groupChatId"
     [groupAvater]="dataChatbox.groupAvatar"
     [groupChatId]="dataChatbox.groupChatId"

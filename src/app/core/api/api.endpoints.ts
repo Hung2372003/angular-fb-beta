@@ -7,6 +7,7 @@ import { ApiResponse } from '../models/api/common-response.api.interface';
 import { NewMessage } from '../models/api/list-new-message.api.interface';
 import { Message } from '../models/components/message/message.interface';
 import { AddNewMessageRequest } from '../models/api/add-new-mesage.api.interface';
+import { PersonalInformationResponse } from '../models/api/get-personal-information.api.interface';
 
 export const buildAuthAPI = (api: CallApiService) => ({
   login: (data: LoginRequest): Promise<ApiResponse<object>> =>
@@ -52,4 +53,9 @@ export const buildChatBoxManagementAPI = (api: CallApiService) => ({
       fromData.append('content', data.content || '');
     return api.callApi<ApiResponse<Array<object>>>('ChatBox/AddNewMessage', 'post', fromData);
   }
+});
+
+export const buildPersonalActionAPI = (api: CallApiService) => ({
+  getPersonalInformation: (data:{userCode:number}): Promise<ApiResponse<PersonalInformationResponse>> =>
+    api.callApi<ApiResponse<PersonalInformationResponse>>('PersonalAction/GetPersonalInformation', 'get',data),
 });

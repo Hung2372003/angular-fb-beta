@@ -68,6 +68,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     const code = this.route.snapshot.queryParamMap.get('code');
     if (code) {
+           this.loadingService.show();
           let data = await this.authAPI.googleExchangeCodeLogin({ code: code });
           this.alert.show(data.title,'success',4000,Date.now())
           await this.SignalRService.startConnection();
@@ -79,6 +80,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     else {
       console.error('Không có code từ Google trả về');
     }
+    this.loadingService.hide();
 
   }
   ngOnInit(): void {
@@ -150,6 +152,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   async onSubmitRegister(){
+    this.loadingService.show();
     if (this.authRegisterForm.invalid) {
         this.markFormGroupTouched(this.authRegisterForm);
         this.alert.show('Please enter complete information!', 'warning', 3000, Date.now());
@@ -171,8 +174,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }
       this.router.navigate(['/messenger']);
     }
+    this.loadingService.hide();
   }
   async onSubmitLogin(){
+    this.loadingService.show();
       if (this.authLoginForm.invalid) {
         this.markFormGroupTouched(this.authLoginForm);
         this.loadingService.hide();
@@ -186,6 +191,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
      await this.SignalRService.startConnection();
           this.router.navigate(['/messenger']);
     }
+    this.loadingService.hide();
   }
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {

@@ -91,6 +91,15 @@
         aspect-ratio: 1/1;
         background: #216FDB ;
         border-radius: 50%;
+        .count{
+          height: 20px;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 500;
+        }
     }
     .bell{
         color: var(--contentApprovedColor);

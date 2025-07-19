@@ -59,7 +59,8 @@
                 <i class="fa-solid fa-circle-plus"></i>
                 <app-actions-menu class="top right" [theme]="{iconColor:'#3653E8'}"
                                   [listMenu]="listMenu" (mouseenter)="tooltipService.hide()"
-                                  [class.hidden]="!isHiddenListAction"/>
+                                  [class.hidden]="!isHiddenListAction"
+                                  style="position: absolute;box-shadow: 1px 1px 10px rgb(172, 172, 172);padding: 10px;"/>
             </li>
             <li [class.hidden]="isHiddenAction" class="action"
                 (mouseenter)="tooltipService.show('Gửi clip âm thanh')"

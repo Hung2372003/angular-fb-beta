@@ -15,7 +15,7 @@ export class PreviewCardComponent implements OnInit{
   @Input() time?:string
   @Input() isOnline?:boolean = false
   @Input() isRead!:boolean
-  @Input() notifi?:boolean = false
+  @Input() notifiCount:number = 0;
   @Input() theme?: Partial<{
     // hoverBackgroundColor?: string;
     backgroundColor?: string;

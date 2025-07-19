@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { TooltipService } from '../tooltip/tooltip.service';
 
 @Component({
   selector: 'app-actions-menu',
@@ -9,16 +10,21 @@ import { Component, ElementRef, Input, OnInit } from '@angular/core';
 export class ActionsMenuComponent implements OnInit {
   constructor(
   private el:ElementRef,
+   public tooltipService:TooltipService,
   ) {}
+  @Input() isLabel?:boolean = true
   @Input() listMenu?: Array<{
     icon: string;
     label: string;
     groupId?: number;
+    notifiCount?: number;
     action?: () => void | undefined;
   }>;
   @Input() theme?: Partial<{
     iconColor?: string;
     textColor?: string;
+    backgroundColor?: string;
+    boxShadowColor?: string;
   }>;
 
   ngOnInit(): void {
@@ -29,12 +35,16 @@ export class ActionsMenuComponent implements OnInit {
     if(this.theme){
       this.setTheme(hostElement, {
          '--icon-color': this.theme.iconColor || '#000',
-         '--text-color': this.theme.textColor || '#000'
+         '--text-color': this.theme.textColor || '#000',
+         '--background-color': this.theme.backgroundColor || '#fff',
+         '--boxShadow-color': this.theme.boxShadowColor || '#fdfdfd01'
       });
     }else{
        this.setTheme(hostElement, {
           '--icon-color':'#000',
           '--text-color':'#000',
+          '--background-color':'#fff',
+          '--boxShadow-color':'#9b9a9a'
       });
     }
   }
