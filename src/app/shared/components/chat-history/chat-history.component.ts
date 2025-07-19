@@ -22,7 +22,7 @@ export class ChatHistoryComponent implements OnInit {
     return false;
   }
   setDate(timeData:string){
-    let time =new Date(new Date(timeData).getTime() - 7 * 60 * 60 * 1000);
+    let time =new Date(new Date(timeData).getTime() + 7 * 60 * 60 * 1000);
     //  let time =new Date(new Date(timeData).getTime());
     let timeNow=new Date();
 
