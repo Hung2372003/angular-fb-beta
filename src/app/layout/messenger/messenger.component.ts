@@ -86,7 +86,7 @@ export class MessengerComponent implements OnInit {
               content: content || '',
               createdBy: parseInt(userCode ?? '0'),
               listFile: listFile || [],
-              createdTime: (new Date((new Date()).getTime() + 7 * 60 * 60 * 1000)).toString(),
+              createdTime: (new Date((new Date()).getTime() -7 * 60 * 60 * 1000)).toString(),
               //  createdTime: new Date().toString(),
             };
             chatBox.listMessage = [...(chatBox.listMessage ?? []), newMessage];
@@ -102,7 +102,7 @@ export class MessengerComponent implements OnInit {
                     newMessage: {
                       ...item.newMessage,
                       content: content ?? '',
-                      createdTime: (new Date((new Date()).getTime() + 7 * 60 * 60 * 1000)).toString(),
+                      createdTime: (new Date((new Date()).getTime() - 7 * 60 * 60 * 1000)).toString(),
 
                     },
                     status: parseInt(userCode ?? '0') != parseInt(localStorage.getItem('userCode') ?? '0') ? false : true,
