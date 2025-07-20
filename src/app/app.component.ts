@@ -13,7 +13,7 @@ import { TooltipComponent } from "./shared/components/tooltip/tooltip.component"
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit,OnDestroy{
+export class AppComponent implements OnInit{
     private router = inject(Router);
     private loadingService = inject(LoadingService);
     private SignalRService = inject(SignalRService)
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit,OnDestroy{
       }
     });
   }
-  async ngOnDestroy(): Promise<void> {
-      await this.SignalRService.disconnect()
-  }
+  // async ngOnDestroy(): Promise<void> {
+  //     await this.SignalRService.disconnect()
+  // }
 }

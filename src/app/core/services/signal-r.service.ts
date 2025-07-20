@@ -15,29 +15,43 @@ export class SignalRService {
     this.connectionStarted = this.startConnection(); // gọi trước luôn để đảm bảo
   }
 
-  async startConnection(): Promise<void> {
-    if (this.hubConnection && this.hubConnection.state === signalR.HubConnectionState.Connected) {
+async startConnection(): Promise<void> {
+  if (this.hubConnection) {
+    if (this.hubConnection.state === signalR.HubConnectionState.Connected) {
       console.log('SignalR already connected.');
       return;
     }
 
-    if (!this.hubConnection) {
-      await this.disconnect()
-      this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(`${this.hostUrlApi}/hub`, {
-          withCredentials: true
-        })
-        .withAutomaticReconnect()
-        .build();
-    }
-
-    try {
-      await this.hubConnection.start();
-      console.log('SignalR Connected!');
-    } catch (err) {
-      console.error('Error connecting SignalR:', err);
+    if (this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+      console.warn('Waiting for hub to disconnect before starting again...');
+      await this.waitForDisconnect();
     }
   }
+
+  this.hubConnection = new signalR.HubConnectionBuilder()
+    .withUrl(`${this.hostUrlApi}/hub`, {
+      withCredentials: true
+    })
+    .withAutomaticReconnect()
+    .build();
+
+  try {
+    await this.hubConnection.start();
+    console.log('SignalR Connected!');
+  } catch (err) {
+    console.error('Error connecting SignalR:', err);
+  }
+}
+private async waitForDisconnect(timeout = 5000): Promise<void> {
+  const start = Date.now();
+  while (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+    if (Date.now() - start > timeout) {
+      console.error('Timeout waiting for hub to disconnect.');
+      break;
+    }
+    await new Promise(resolve => setTimeout(resolve, 100)); // đợi 100ms rồi kiểm tra lại
+  }
+}
 
 
   public async disconnect(): Promise<void> {
