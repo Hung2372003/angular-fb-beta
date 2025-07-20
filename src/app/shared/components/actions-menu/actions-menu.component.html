@@ -5,7 +5,7 @@
         (mouseleave)="tooltipService.hide()"
     >
       <div class="menu-item">
-            @if(item.icon){ <i class="{{ item.icon }} icon"></i> }
+           @if(item.icon){ <i class="{{ item.icon }} icon"></i> }
            @if (item.label && item.label!=''&& isLabel) {<span class="text">{{ item.label }}</span>}
       </div>
 

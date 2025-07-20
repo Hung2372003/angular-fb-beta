@@ -1,8 +1,7 @@
-import { TooltipService } from './../../shared/components/tooltip/tooltip.service';
 import { LoadingService } from './../../core/services/loading.service';
 import { SignalRService } from './../../core/services/signal-r.service';
 import { ChatService } from './../../core/services/chat.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChatHistoryComponent } from '../../shared/components/chat-history/chat-history.component';
 import { ChatBoxComponent } from '../../shared/components/chat-box/chat-box.component';
 import { CallApiService } from '../../core/services/call-api.service';
@@ -37,7 +36,6 @@ export class MessengerComponent implements OnInit {
     private ChatService: ChatService,
     private SignalRService: SignalRService,
     private LoadingService: LoadingService,
-    public tooltipService: TooltipService
   ){
     this.actionMessageAPI = buildActionMessageAPI(this.CallApiService);
     this.chatBoxManagementAPI = buildChatBoxManagementAPI(this.CallApiService);
@@ -59,9 +57,10 @@ export class MessengerComponent implements OnInit {
   isToggleMenu: boolean = false;
   updateMenuItem() {
   this.listMenuItem = [
-    { icon: 'fa-solid fa-comment', label: 'Tin nhắn', notifiCount: this.isToggleMenu? this.listNewMessage.filter(item => item.status === false).length : 0, action: () => { console.log('Tin nhắn clicked')} },
+    { icon: 'fa-brands fa-facebook-messenger', label: 'Tin nhắn', notifiCount: this.isToggleMenu? this.listNewMessage.filter(item => item.status === false).length : 0, action: () => { console.log('Tin nhắn clicked')} },
     { icon:'fa-regular fa-user-group', label:'Bạn bè' },
     { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => { console.log('Tạo nhóm clicked')} },
+    { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' }
 
   ];
 }

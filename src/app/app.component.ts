@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { SignalRService } from './core/services/signal-r.service';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 import { AlertHostComponent } from "./shared/components/alert/alert-host/alert-host.component";
@@ -11,10 +12,11 @@ import { LoadingService } from './core/services/loading.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit,OnDestroy{
     private router = inject(Router);
     private loadingService = inject(LoadingService);
-  title = 'angular_fb_beta';
+    private SignalRService = inject(SignalRService)
+     title = 'angular_fb_beta';
    ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -29,5 +31,8 @@ export class AppComponent {
         this.loadingService.hide();
       }
     });
+  }
+  ngOnDestroy(): void {
+      this.SignalRService.disconnect()
   }
 }

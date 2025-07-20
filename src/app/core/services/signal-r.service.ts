@@ -31,6 +31,17 @@ export class SignalRService {
     }
   }
 
+  public async disconnect(): Promise<void> {
+  if (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+    try {
+      await this.hubConnection.stop();
+      console.log('SignalR disconnected');
+    } catch (err) {
+      console.error('Error disconnecting SignalR:', err);
+    }
+  }
+}
+
   public async joinGroup(groupId: string): Promise<void> {
 
     if (!this.hubConnection || this.hubConnection.state !== signalR.HubConnectionState.Connected) {
