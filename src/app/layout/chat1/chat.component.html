@@ -1,9 +1,10 @@
 <app-tooltip></app-tooltip>
-<div class="menu" [style]="{ width: !isToggleMenu ? 'fit-content' : '' }">
+<!-- <div class="menu" [style]="{ width: !isToggleMenu ? 'fit-content' : '' }">
   <app-actions-menu [listMenu]="listMenuItem"
                     [theme]="{iconColor: 'black', backgroundColor: '#ffffff00', boxShadowColor: '#fdfdfd01'}"
                     [isLabel]="isToggleMenu"
                     />
+
   <div class="menu-infor" [class.hidden-content]="!isToggleMenu">
     <app-preview-card
       [avatar]="personalInformation?.avatar || ''"
@@ -12,16 +13,19 @@
     />
     <div (click)="toggleMenu()" class="menu-blinds"><i class="fa-regular fa-blinds-open"></i></div>
   </div>
-</div>
+</div> -->
 
 <app-chat-history
   class="chat-history"
+  [class.hidden-chat]="checkScreenSize() && !isHiddenChat"
   [listNewMessage]="listNewMessage"
   (openChat)="openChat($event)"
   [listUserOnline]="listUserOnline"
-></app-chat-history>
-  <app-chat-box
+/>
+<app-chat-box
     class="chat-box"
+    [class.hidden-chat]="checkScreenSize() && isHiddenChat"
+    [isHiddenBackButton]="!checkScreenSize()"
     (click)="clickChatBox(dataChatbox.groupChatId)"
     [class.hidden-chatbox]="!dataChatbox.groupChatId"
     [groupAvater]="dataChatbox.groupAvatar"
@@ -31,8 +35,9 @@
     [listUser]="dataChatbox.listUser"
     (message)="sendMessage($event)"
     [listUserOnline]="listUserOnline"
-></app-chat-box>
-<div [class.hidden-chatbox]="dataChatbox.groupChatId" class="content">
+    (back)="backFromChatBox($event)"
+/>
+<div [class.hidden-chatbox]="dataChatbox.groupChatId"  [class.hidden-chat]="checkScreenSize()" class="content">
     <div>Hãy bắt đầu đoạn chát của bạn</div>
 </div>
 

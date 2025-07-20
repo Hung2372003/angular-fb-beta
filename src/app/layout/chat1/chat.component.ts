@@ -1,19 +1,15 @@
-import { LoadingService } from './../../core/services/loading.service';
-import { SignalRService } from './../../core/services/signal-r.service';
-import { ChatService } from './../../core/services/chat.service';
+import { LoadingService } from '../../core/services/loading.service';
+import { SignalRService } from '../../core/services/signal-r.service';
+import { ChatService } from '../../core/services/chat.service';
 import { Component, OnInit } from '@angular/core';
 import { ChatHistoryComponent } from '../../shared/components/chat-history/chat-history.component';
 import { ChatBoxComponent } from '../../shared/components/chat-box/chat-box.component';
 import { CallApiService } from '../../core/services/call-api.service';
-import { buildActionMessageAPI, buildChatBoxManagementAPI, buildPersonalActionAPI } from '../../core/api/api.endpoints';
+import { buildActionMessageAPI, buildChatBoxManagementAPI } from '../../core/api/api.endpoints';
 import { NewMessage } from '../../core/models/api/list-new-message.api.interface';
 import { Message } from '../../core/models/components/message/message.interface';
 import { User } from '../../core/models/common/user.interface';
 import { TooltipComponent } from "../../shared/components/tooltip/tooltip.component";
-import { ActionsMenuComponent } from "../../shared/components/actions-menu/actions-menu.component";
-import { PreviewCardComponent } from "../../shared/components/preview-card/preview-card.component";
-import { PersonalInformationResponse } from '../../core/models/api/get-personal-information.api.interface';
-
 interface DataChatbox {
   groupChatId?: number;
   groupAvatar?: string;
@@ -23,14 +19,13 @@ interface DataChatbox {
 }
 @Component({
   selector: 'app-messenger',
-  imports: [ChatHistoryComponent, ChatBoxComponent, TooltipComponent, ActionsMenuComponent, PreviewCardComponent],
-  templateUrl: './messenger.component.html',
-  styleUrl: './messenger.component.scss'
+  imports: [ChatHistoryComponent, ChatBoxComponent, TooltipComponent],
+  templateUrl: './chat.component.html',
+  styleUrl: './chat.component.scss'
 })
-export class MessengerComponent implements OnInit {
+export class ChatComponent implements OnInit {
   private actionMessageAPI: ReturnType<typeof buildActionMessageAPI>;
   private chatBoxManagementAPI: ReturnType<typeof buildChatBoxManagementAPI>
-  private personalActionAPI: ReturnType<typeof buildPersonalActionAPI>;
   constructor(
     private CallApiService:CallApiService,
     private ChatService: ChatService,
@@ -39,7 +34,6 @@ export class MessengerComponent implements OnInit {
   ){
     this.actionMessageAPI = buildActionMessageAPI(this.CallApiService);
     this.chatBoxManagementAPI = buildChatBoxManagementAPI(this.CallApiService);
-    this.personalActionAPI = buildPersonalActionAPI(this.CallApiService);
   }
   listNewMessage: Array <NewMessage> = []
   listDataChatBox: Array <DataChatbox> = []
@@ -53,27 +47,16 @@ export class MessengerComponent implements OnInit {
     notifiCount?: number;
     action?: () => void | undefined;
   }>;
-  personalInformation?:PersonalInformationResponse
   isToggleMenu: boolean = false;
-  updateMenuItem() {
-  this.listMenuItem = [
-    { icon: 'fa-brands fa-facebook-messenger', label: 'Tin nhắn', notifiCount: this.isToggleMenu? this.listNewMessage.filter(item => item.status === false).length : 0, action: () => { console.log('Tin nhắn clicked')} },
-    { icon:'fa-regular fa-user-group', label:'Bạn bè' },
-    { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => { console.log('Tạo nhóm clicked')} },
-    { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' }
+  isHiddenChat: boolean = true;
 
-  ];
-}
   async ngOnInit(): Promise<void> {
-    this.personalInformation = (await this.personalActionAPI.getPersonalInformation({userCode: parseInt(localStorage.getItem('userCode') ?? '0')})).object;
-
     await this.SignalRService.startConnection();
     this.LoadingService.show();
     await this.getNewMessage();
     await this.listNewMessage.forEach(async newMessage => {
     await this.SignalRService.joinGroup('groupChat_' + newMessage.groupChatId.toString());
     })
-    this.updateMenuItem();
     this.SignalRService.onReceiveMessage((groupId, content, userCode, listFile) => {
       if (groupId) {
         groupId = groupId.replace('groupChat_', '');
@@ -111,7 +94,6 @@ export class MessengerComponent implements OnInit {
               })
               .sort((a, b) => (a.groupChatId == groupIdNum ? -1 : b.groupChatId == groupIdNum ? 1 : 0))
           ];
-          this.updateMenuItem();
         }
 
     });
@@ -151,6 +133,8 @@ export class MessengerComponent implements OnInit {
   }
 
   async openChat(newMessage: NewMessage){
+    this.isHiddenChat = false
+
     if(newMessage.status == false && newMessage.newMessage.createdBy != parseInt(localStorage.getItem('userCode') ?? '0')) {
         await this.actionMessageAPI.setStatusReadMessage(newMessage.groupChatId)
         newMessage.status = true;
@@ -163,7 +147,6 @@ export class MessengerComponent implements OnInit {
           }
           return item as NewMessage;
         });
-         this.updateMenuItem();
     }
     if(newMessage.groupChatId == this.dataChatbox.groupChatId ) return;
     if(this.listDataChatBox.some(chatBox => chatBox.groupChatId == newMessage.groupChatId)) {
@@ -183,6 +166,11 @@ export class MessengerComponent implements OnInit {
   }
   toggleMenu(){
     this.isToggleMenu = !this.isToggleMenu;
-    this.updateMenuItem();
+  }
+  backFromChatBox(event:Event){
+    this.isHiddenChat=!this.isHiddenChat
+  }
+  checkScreenSize(): boolean {
+    return window.innerWidth <= 740 ? true : false;
   }
 }

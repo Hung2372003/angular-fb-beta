@@ -18,8 +18,6 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
   constructor(
     public tooltipService:TooltipService,
     private datePipe: DatePipe,
-    private ngZone: NgZone
-
   ){}
  @Input() groupChatId?:number
  @Input() listMesages?:Array<Message> = []
@@ -28,6 +26,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
  @Input() listUser?:Array<User> = []
  @Input() shouldScrollToBottom: boolean = true;
  @Input() listUserOnline?: Array<string> = [];
+ @Input() isHiddenBackButton?:boolean = true;
  @Input() theme?:Partial<{
     // hoverBackgroundColor?: string;
     backgroundColor?: string;
@@ -42,6 +41,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
   @ViewChild('chatInput') chatInput!:ElementRef;
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   @Output() message = new EventEmitter<{ groupChatId?: number; content?: string; files?: Array<{file: File,url: string}> }>();
+  @Output() back = new EventEmitter();
   previewFile:Array<{
     file: File,
     url: string
@@ -205,5 +205,8 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
       return this.listUser?.some(user => listUserOnline.includes(user.userCode.toString())) ?? false;
     }
     return false;
+  }
+  backEvent(){
+    this.back.emit();
   }
 }

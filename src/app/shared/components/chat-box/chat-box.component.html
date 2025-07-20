@@ -1,5 +1,6 @@
 <header>
     <div class="title">
+        @if(!isHiddenBackButton){<div (click)="backEvent()" class="back-button"><i class="fa-regular fa-arrow-left"></i></div>}
         <app-preview-card
             (mouseenter)="tooltipService.show(groupName ? groupName : 'ok')"
             (mouseleave)="tooltipService.hide()"

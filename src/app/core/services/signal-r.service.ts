@@ -16,12 +16,19 @@ export class SignalRService {
   }
 
   async startConnection(): Promise<void> {
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.hostUrlApi}/hub`, {
-        withCredentials: true
-      })
-      .withAutomaticReconnect()
-      .build();
+    if (this.hubConnection && this.hubConnection.state === signalR.HubConnectionState.Connected) {
+      console.log('SignalR already connected.');
+      return;
+    }
+
+    if (!this.hubConnection) {
+      this.hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(`${this.hostUrlApi}/hub`, {
+          withCredentials: true
+        })
+        .withAutomaticReconnect()
+        .build();
+    }
 
     try {
       await this.hubConnection.start();
@@ -30,6 +37,7 @@ export class SignalRService {
       console.error('Error connecting SignalR:', err);
     }
   }
+
 
   public async disconnect(): Promise<void> {
   if (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {

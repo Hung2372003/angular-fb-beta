@@ -36,7 +36,9 @@ export const buildActionMessageAPI = (api: CallApiService) => ({
   listNewMessage: (): Promise<ApiResponse<Array<NewMessage>>> =>
     api.callApi<ApiResponse<Array<NewMessage>>>('ActionMessage/GetAllMessageGroups', 'get'),
   setStatusReadMessage : (groupChatId:number):Promise<ApiResponse<any>> =>
-    api.callApi<ApiResponse<any>>('ActionMessage/SetStatusReadMessage' , 'patch',groupChatId)
+    api.callApi<ApiResponse<any>>('ActionMessage/SetStatusReadMessage' , 'patch',groupChatId),
+  getUnreadMessageCount : ():Promise<{count:number}> =>
+    api.callApi<{count:number}>('ActionMessage/GetUnreadMessageCount','get')
 });
 
 export const buildChatBoxManagementAPI = (api: CallApiService) => ({
