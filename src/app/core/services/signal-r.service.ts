@@ -8,11 +8,23 @@ import { environment } from '../../../environments/environment';
 export class SignalRService {
   private hostUrlApi: string;
   private hubConnection!: signalR.HubConnection;
-  private connectionStarted: Promise<void>;
 
   constructor() {
     this.hostUrlApi = environment.apiUrl;
-    this.connectionStarted = this.startConnection(); // gọi trước luôn để đảm bảo
+    this.startConnection(); // khởi tạo ngay lần đầu
+  }
+
+  private async ensureDisconnected(): Promise<void> {
+    if (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+      return new Promise((resolve) => {
+        const check = setInterval(() => {
+          if (this.hubConnection.state === signalR.HubConnectionState.Disconnected) {
+            clearInterval(check);
+            resolve();
+          }
+        }, 300);
+      });
+    }
   }
 
   async startConnection(): Promise<void> {
@@ -21,6 +33,8 @@ export class SignalRService {
       return;
     }
 
+    await this.ensureDisconnected();
+
     if (!this.hubConnection) {
       this.hubConnection = new signalR.HubConnectionBuilder()
         .withUrl(`${this.hostUrlApi}/hub`, {
@@ -28,6 +42,10 @@ export class SignalRService {
         })
         .withAutomaticReconnect()
         .build();
+
+      this.hubConnection.onclose(err => console.warn('SignalR closed', err));
+      this.hubConnection.onreconnecting(err => console.warn('SignalR reconnecting...', err));
+      this.hubConnection.onreconnected(connectionId => console.log('SignalR reconnected:', connectionId));
     }
 
     try {
@@ -38,26 +56,24 @@ export class SignalRService {
     }
   }
 
-
   public async disconnect(): Promise<void> {
-  if (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
-    try {
-      await this.hubConnection.stop();
-      console.log('SignalR disconnected');
-    } catch (err) {
-      console.error('Error disconnecting SignalR:', err);
+    if (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
+      try {
+        await this.hubConnection.stop();
+        console.log('SignalR disconnected');
+      } catch (err) {
+        console.error('Error disconnecting SignalR:', err);
+      }
     }
   }
-}
 
   public async joinGroup(groupId: string): Promise<void> {
-
     if (!this.hubConnection || this.hubConnection.state !== signalR.HubConnectionState.Connected) {
       console.warn('Cannot join group: SignalR is not connected');
       return;
     }
 
-   await this.hubConnection.invoke('JoinGroup', groupId)
+    await this.hubConnection.invoke('JoinGroup', groupId)
       .then(() => console.log(`Joined group: ${groupId}`))
       .catch(err => console.error('Error joining group:', err));
   }
@@ -68,30 +84,28 @@ export class SignalRService {
       return;
     }
 
-   await this.hubConnection.invoke('LeaveGroup', groupId)
+    await this.hubConnection.invoke('LeaveGroup', groupId)
       .catch(err => console.error('Error leaving group:', err));
   }
 
   public async SendMessageToGroup(groupId?: string, content?: string, listFile?: Array<any>): Promise<void> {
-
     if (!this.hubConnection || this.hubConnection.state !== signalR.HubConnectionState.Connected) {
       console.warn('Cannot send message: SignalR is not connected');
       return;
     }
 
-   await this.hubConnection.invoke('SendMessageToGroup', groupId, content, listFile)
+    await this.hubConnection.invoke('SendMessageToGroup', groupId, content, listFile)
       .then(() => console.log(`Message sent to group: ${groupId}`))
       .catch(err => console.error('Error sending message to group:', err));
   }
 
-  public onReceiveMessage(callback: (groupId?: string, content?: string, userCode?: string, listFile?: Array<any>) => void): void {
-    this.connectionStarted.then(() => {
-      this.hubConnection.on('ReceiveMessage', callback);
-    });
+  public async onReceiveMessage(callback: (groupId?: string, content?: string, userCode?: string, listFile?: Array<any>) => void): Promise<void> {
+    await this.startConnection();
+    this.hubConnection.on('ReceiveMessage', callback);
   }
-  public onListUserOnline(callback: (listUserOnline: Array<string>) => void): void {
-    this.connectionStarted.then(() => {
-      this.hubConnection.on('ListUserOnline', callback);
-    });
+
+  public async onListUserOnline(callback: (listUserOnline: Array<string>) => void): Promise<void> {
+    await this.startConnection();
+    this.hubConnection.on('ListUserOnline', callback);
   }
 }
