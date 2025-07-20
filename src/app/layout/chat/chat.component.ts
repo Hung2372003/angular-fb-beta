@@ -1,7 +1,7 @@
 import { LoadingService } from '../../core/services/loading.service';
 import { SignalRService } from '../../core/services/signal-r.service';
 import { ChatService } from '../../core/services/chat.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ChatHistoryComponent } from '../../shared/components/chat-history/chat-history.component';
 import { ChatBoxComponent } from '../../shared/components/chat-box/chat-box.component';
 import { CallApiService } from '../../core/services/call-api.service';
@@ -9,7 +9,6 @@ import { buildActionMessageAPI, buildChatBoxManagementAPI } from '../../core/api
 import { NewMessage } from '../../core/models/api/list-new-message.api.interface';
 import { Message } from '../../core/models/components/message/message.interface';
 import { User } from '../../core/models/common/user.interface';
-import { TooltipComponent } from "../../shared/components/tooltip/tooltip.component";
 interface DataChatbox {
   groupChatId?: number;
   groupAvatar?: string;
@@ -19,7 +18,7 @@ interface DataChatbox {
 }
 @Component({
   selector: 'app-chat',
-  imports: [ChatHistoryComponent, ChatBoxComponent, TooltipComponent],
+  imports: [ChatHistoryComponent, ChatBoxComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
@@ -48,7 +47,8 @@ export class ChatComponent implements OnInit {
     action?: () => void | undefined;
   }>;
   isToggleMenu: boolean = false;
-  isHiddenChat: boolean = true;
+  isHiddenChat?: boolean = true;
+  @Output() isHiddenChatToParent = new EventEmitter<boolean>();
 
   async ngOnInit(): Promise<void> {
     await this.SignalRService.startConnection();
@@ -133,7 +133,8 @@ export class ChatComponent implements OnInit {
   }
 
   async openChat(newMessage: NewMessage){
-    this.isHiddenChat = false
+    this.isHiddenChat = false;
+    this.isHiddenChatToParent.emit(this.isHiddenChat);
 
     if(newMessage.status == false && newMessage.newMessage.createdBy != parseInt(localStorage.getItem('userCode') ?? '0')) {
         await this.actionMessageAPI.setStatusReadMessage(newMessage.groupChatId)
@@ -169,6 +170,7 @@ export class ChatComponent implements OnInit {
   }
   backFromChatBox(event:Event){
     this.isHiddenChat=!this.isHiddenChat
+    this.isHiddenChatToParent.emit(this.isHiddenChat)
   }
   checkScreenSize(): boolean {
     return window.innerWidth <= 740 ? true : false;

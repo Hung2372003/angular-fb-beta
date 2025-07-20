@@ -1,7 +1,9 @@
 
-<div class="menu" [style]="{ width: !isToggleMenu ? 'fit-content' : '' }">
+<div class="menu" [style]="{ width: !isToggleMenu ? 'fit-content' : ''}">
   <app-actions-menu [listMenu]="listMenuItem"
-                    [theme]="{iconColor: 'black', backgroundColor: '#ffffff00', boxShadowColor: '#fdfdfd01'}"
+                    [theme]="{iconColor: 'black',
+                              backgroundColor:'#ffffff00',
+                              boxShadowColor: '#fdfdfd01',}"
                     [isLabel]="isToggleMenu"
                     />
 
@@ -15,6 +17,26 @@
   </div>
 </div>
 <router-outlet/>
-<div class="menu-bottom">
-  <div></div>
+<div class="menu-bottom" [class.hidden]="!isHiddenMenuBottom || !checkScreenSize()">
+  <div class="icon" [routerLink]="['/messenger/chat']" routerLinkActive="router-link-active"
+    (mouseenter)="tooltipService.show('Đoạn chat')"
+    (mouseleave)="tooltipService.hide()">
+    <i class="fa-brands fa-facebook-messenger">
+      <div class="count">{{listMenuItem?.[0]?.notifiCount}}</div>
+    </i>
+    <span>Đoạn chat</span>
+  </div>
+  <div class="icon"
+    (mouseenter)="tooltipService.show('Tin')"
+    (mouseleave)="tooltipService.hide()">
+    <i class="fa-regular fa-scanner-touchscreen"></i>
+    <span>Tin</span>
+  </div>
+  <div class="icon"
+    (mouseenter)="tooltipService.show('Menu')"
+    (mouseleave)="tooltipService.hide()"
+  >
+     <i class="fa-regular fa-blinds-open"></i>
+     <span>Menu</span>
+  </div>
 </div>

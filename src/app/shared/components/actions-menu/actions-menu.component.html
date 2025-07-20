@@ -3,13 +3,20 @@
     <li (click)="item.action && item.action()"
         (mouseenter)="tooltipService.show(item.label)"
         (mouseleave)="tooltipService.hide()"
+        [style.background]="item.backgroupActiveColor ? item.backgroupActiveColor:''"
     >
       <div class="menu-item">
-           @if(item.icon){ <i class="{{ item.icon }} icon"></i> }
+           @if(item.icon){
+             <i class="{{ item.icon }} icon">
+                @if (item.notifiCount && item.notifiCount > 0 && !isLabel) {
+                  <div class="notification-count notification-absolute">{{ item.notifiCount}}</div>
+                }
+             </i>
+           }
            @if (item.label && item.label!=''&& isLabel) {<span class="text">{{ item.label }}</span>}
       </div>
 
-      @if (item.notifiCount && item.notifiCount > 0) {
+      @if (item.notifiCount && item.notifiCount > 0 && isLabel) {
         <div class="notification-count">{{ item.notifiCount}}</div>
       }
     </li>

@@ -3,18 +3,18 @@
   flex-direction: row;
   box-sizing: border-box;
   background: #eaeaea;
+  height: 100%;
 }
 .menu {
   padding-left: 7px;
   padding-top:17px;
   padding-bottom: 17px;
   flex: 0 0 auto;
-  // height: 100%;
+  padding-right: 7px;
   width: 100%;
   max-width: 250px !important;
   display: flex;
   flex-direction: column;
-  // padding-bottom: 5px;
   app-actions-menu {
     flex: 1 1 auto;
     width: 100%;
@@ -52,4 +52,76 @@
     display: flex;
     flex-direction: column !important;
   }
+}
+.menu-bottom{
+  border-top: 1px solid rgb(213, 213, 213);
+  background: white;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-around;
+  .icon{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex: 1 1 auto;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 10px;
+    margin: 3px;
+    i{
+          font-size: 23px;
+          position: relative;
+          .count{
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 21px;
+            background: #d60000;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            top: -50%;
+            right: -50%;
+            text-align: center;
+            border: 3px solid #ffffff;
+          }
+    }
+    span{
+      font-size: 14px;
+      font-weight: 500;
+    }
+    &:hover{
+       background: #bebebe52;
+    }
+    &:active{
+      background: #bebebe52;
+    }
+  }
+}
+@media (max-width: 740px) {
+  :host{
+    flex-direction: column;
+    background: rgb(255, 255, 255);
+  }
+  .menu{
+    display: none;
+  }
+}
+.router-link-active{
+  i{
+     color: rgb(0 74 212)
+  }
+  span{
+     color: rgb(0 74 212)
+  }
+
+}
+.hidden{
+  display: none;
 }

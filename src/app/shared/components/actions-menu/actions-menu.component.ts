@@ -18,6 +18,7 @@ export class ActionsMenuComponent implements OnInit {
     label: string;
     groupId?: number;
     notifiCount?: number;
+    backgroupActiveColor?:string;
     action?: () => void | undefined;
   }>;
   @Input() theme?: Partial<{
@@ -37,14 +38,14 @@ export class ActionsMenuComponent implements OnInit {
          '--icon-color': this.theme.iconColor || '#000',
          '--text-color': this.theme.textColor || '#000',
          '--background-color': this.theme.backgroundColor || '#fff',
-         '--boxShadow-color': this.theme.boxShadowColor || '#fdfdfd01'
+         '--boxShadow-color': this.theme.boxShadowColor || '#fdfdfd01',
       });
     }else{
        this.setTheme(hostElement, {
           '--icon-color':'#000',
           '--text-color':'#000',
           '--background-color':'#fff',
-          '--boxShadow-color':'#9b9a9a'
+          '--boxShadow-color':'#9b9a9a',
       });
     }
   }

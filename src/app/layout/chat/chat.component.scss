@@ -8,19 +8,26 @@
     box-sizing: border-box;
     flex: 1 1 auto;
     min-width: 0;
+    min-height: 0;
 
 }
 app-chat-history{
     flex: 0 0 auto;
-    min-width: 27%;
     // width: 100%;
+    min-width: 350px;
     max-width: 400px;
 }
 @media (max-width: 740px) {
+  :host{
+    padding: 0;
+    gap: 0;
+  }
   app-chat-history{
     flex: 1 1 auto;
     width: 100%;
     max-width: 740px;
+    box-shadow: #bebebe00;
+    border-radius: 0;
   }
 }
 app-chat-box{

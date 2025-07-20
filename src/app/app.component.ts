@@ -5,10 +5,11 @@ import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationErr
 import { AlertHostComponent } from "./shared/components/alert/alert-host/alert-host.component";
 import { LoadingComponent } from "./shared/components/loading/loading.component";
 import { LoadingService } from './core/services/loading.service';
+import { TooltipComponent } from "./shared/components/tooltip/tooltip.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AlertHostComponent, LoadingComponent],
+  imports: [RouterOutlet, AlertHostComponent, LoadingComponent, TooltipComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

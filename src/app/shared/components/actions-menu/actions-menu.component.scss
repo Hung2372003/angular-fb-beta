@@ -35,25 +35,27 @@ ul {
     align-items: center;
     border-radius: 10px;
     padding: 7px 10px;
+    background:var(--backgroup-active-color, #ffffff00) ;
      cursor: pointer;
      &:hover {
-      background-color: #f4f4f4d4;
+      background-color: #eeeeeed4;
     };
     .menu-item{
     display: flex;
     align-items: center;
     gap: 10px;
     .icon {
-        font-size: 17px;
-        color: var(--icon-color, #000);
+        font-size: 23px;
+        color: var(--icon-color, #535353);
         aspect-ratio: 1 / 1;
         width: 35px;
-        background: #e0e0e0b8;
+        background: #ffffff00;
         display: flex ;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
         box-sizing: border-box;
+        position: relative;
     }
     .text {
       font-size: 16px;
@@ -76,6 +78,13 @@ ul {
     font-size: 12px;
     font-weight: bold;
     text-align: center;
+
+    &.notification-absolute{
+      position: absolute;
+      top: -10%;
+      right: -17%;
+      border: 3px solid white;
+    }
   }
 }
 }
