@@ -33,7 +33,7 @@ export class AppComponent implements OnInit,OnDestroy{
       }
     });
   }
-  ngOnDestroy(): void {
-      this.SignalRService.disconnect()
+  async ngOnDestroy(): Promise<void> {
+      await this.SignalRService.disconnect()
   }
 }
