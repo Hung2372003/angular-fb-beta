@@ -78,33 +78,35 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
   triggerFileInput() {
     this.fileInputRef.nativeElement.click();
   }
+insertNewLine(): void {
+  const selection = window.getSelection();
+  if (!selection || !selection.rangeCount) return;
 
-  insertNewLine(): void {
-    const selection = window.getSelection();
-    if (!selection || !selection.rangeCount) return;
+  const range = selection.getRangeAt(0);
+  const br = document.createElement('br');
 
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
+  range.deleteContents();
+  range.insertNode(br);
 
-    const br = document.createElement("br");
-    const br2 = document.createElement("br"); // Tạo thêm 1 br để giả lập Enter xuống dòng
+  // Tạo 1 thẻ text rỗng để đặt con trỏ phía sau <br>
+  const space = document.createTextNode('\u200B'); // zero-width space
+  range.insertNode(space);
 
-    range.insertNode(br2);
-    range.insertNode(br);
+  range.setStartAfter(space);
+  range.setEndAfter(space);
 
-    // Đặt lại vị trí con trỏ sau thẻ <br><br>
-    range.setStartAfter(br2);
-    range.setEndAfter(br2);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
   async onKeyDown(event: KeyboardEvent): Promise<void> {
     setTimeout(() => {
       const message = this.chatInput.nativeElement.innerText.trim();
       this.isHiddenAction = message !== '';
-      // if (event.key === 'Enter'&& this.isMobile()) {
+      // if (event.key === 'Enter') {
       //       event.preventDefault();
       //       this.insertNewLine();
+
       //    }
       if (event.key === 'Enter' && !event.shiftKey && !this.isMobile()) {
         event.preventDefault();
