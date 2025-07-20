@@ -127,7 +127,8 @@
             </li>
             <li [class.hidden]="!isHiddenAction" class="action"
                 (mouseenter)="tooltipService.show('Nhấp enter để gửi')"
-                (mouseleave)="tooltipService.hide()">
+                (mouseleave)="tooltipService.hide()"
+                (click)="clickSend()">
                 <i class="fa-solid fa-paper-plane-top"></i>
             </li>
         </ul>

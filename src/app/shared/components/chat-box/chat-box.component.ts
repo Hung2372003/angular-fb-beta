@@ -83,7 +83,7 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
     setTimeout(() => {
       const message = this.chatInput.nativeElement.innerText.trim();
       this.isHiddenAction = message !== '';
-      if (event.key === 'Enter' && !event.shiftKey) {
+      if (event.key === 'Enter' && !event.shiftKey && !this.isMobile()) {
         event.preventDefault();
         if (message || this.previewFile.length > 0) {
           this.sendMessage(message, this.previewFile);
@@ -94,7 +94,21 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
       }
     });
   }
-
+  private isMobile(): boolean {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+  async clickSend(): Promise<void> {
+    setTimeout(() => {
+      const message = this.chatInput.nativeElement.innerText.trim();
+      this.isHiddenAction = message !== '';
+        if (message || this.previewFile.length > 0) {
+          this.sendMessage(message, this.previewFile);
+          this.chatInput.nativeElement.innerText = '';
+          this.previewFile = [];
+          this.isHiddenAction = false;
+        }
+    });
+  }
   sendMessage(message?: string,listFile?: Array<{file: File,url: string}>): void {
     this.message.emit({groupChatId: this.groupChatId, content: message, files: listFile });
   }
