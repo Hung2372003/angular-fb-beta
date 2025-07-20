@@ -79,13 +79,32 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
     this.fileInputRef.nativeElement.click();
   }
 
+  insertNewLine(): void {
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const br = document.createElement("br");
+    const br2 = document.createElement("br"); // Tạo thêm 1 br để giả lập Enter xuống dòng
+
+    range.insertNode(br2);
+    range.insertNode(br);
+
+    // Đặt lại vị trí con trỏ sau thẻ <br><br>
+    range.setStartAfter(br2);
+    range.setEndAfter(br2);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
   async onKeyDown(event: KeyboardEvent): Promise<void> {
     setTimeout(() => {
       const message = this.chatInput.nativeElement.innerText.trim();
       this.isHiddenAction = message !== '';
       if (event.key === 'Enter'&& this.isMobile()) {
             event.preventDefault();
-            document.execCommand('insertHTML', false, '<br><br>');
+            this.insertNewLine();
          }
       if (event.key === 'Enter' && !event.shiftKey && !this.isMobile()) {
         event.preventDefault();
