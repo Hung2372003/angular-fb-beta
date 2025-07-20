@@ -8,7 +8,7 @@ import { buildActionMessageAPI, buildPersonalActionAPI } from '../../core/api/ap
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-chat',
+  selector: 'app-messenger',
   imports: [ActionsMenuComponent, PreviewCardComponent, RouterOutlet],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'

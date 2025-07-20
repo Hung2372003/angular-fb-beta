@@ -18,7 +18,7 @@ interface DataChatbox {
   listUser?: Array<User>;
 }
 @Component({
-  selector: 'app-messenger',
+  selector: 'app-chat',
   imports: [ChatHistoryComponent, ChatBoxComponent, TooltipComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
