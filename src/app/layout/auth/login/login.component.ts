@@ -156,6 +156,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.authRegisterForm.invalid) {
         this.markFormGroupTouched(this.authRegisterForm);
         this.alert.show('Please enter complete information!', 'warning', 3000, Date.now());
+         this.loadingService.hide();
         return;
     }
     const raw = this.authRegisterForm.getRawValue();
