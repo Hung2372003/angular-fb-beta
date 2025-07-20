@@ -102,10 +102,10 @@ export class ChatBoxComponent implements OnChanges, AfterViewInit {
     setTimeout(() => {
       const message = this.chatInput.nativeElement.innerText.trim();
       this.isHiddenAction = message !== '';
-      if (event.key === 'Enter'&& this.isMobile()) {
-            event.preventDefault();
-            this.insertNewLine();
-         }
+      // if (event.key === 'Enter'&& this.isMobile()) {
+      //       event.preventDefault();
+      //       this.insertNewLine();
+      //    }
       if (event.key === 'Enter' && !event.shiftKey && !this.isMobile()) {
         event.preventDefault();
         if (message || this.previewFile.length > 0) {
