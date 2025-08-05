@@ -24,7 +24,8 @@ export class AuthService {
       }
       return true;
     } catch {
-      this.alert.show('Yêu cầu đăng nhập!','error',3000,Date.now())
+
+      this.alert.show('Bạn chưa đăng nhập hoặc cookie không được cho phép!','error',3000,Date.now())
       return false;
     }
   }

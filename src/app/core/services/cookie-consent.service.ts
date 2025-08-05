@@ -15,4 +15,12 @@ export class CookieConsentService {
   denyConsent(): void {
     localStorage.setItem(this.consentKey, 'false');
   }
+  isCookieEnabled(): boolean {
+    try {
+      document.cookie = 'testcookie=1';
+      return document.cookie.indexOf('testcookie=1') !== -1;
+    } catch {
+      return false;
+    }
+  }
 }
