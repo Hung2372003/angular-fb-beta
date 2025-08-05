@@ -6,10 +6,11 @@ import { AlertHostComponent } from "./shared/components/alert/alert-host/alert-h
 import { LoadingComponent } from "./shared/components/loading/loading.component";
 import { LoadingService } from './core/services/loading.service';
 import { TooltipComponent } from "./shared/components/tooltip/tooltip.component";
+import { CookieConsentComponent } from "./shared/components/cookie-consent/cookie-consent.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, AlertHostComponent, LoadingComponent, TooltipComponent],
+  imports: [RouterOutlet, AlertHostComponent, LoadingComponent, TooltipComponent, CookieConsentComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

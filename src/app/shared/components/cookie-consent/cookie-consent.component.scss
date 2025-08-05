@@ -1,0 +1,72 @@
+.cookie-banner {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  width: 95%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 1rem 1.5rem;
+  z-index: 1000;
+  animation: slide-up 0.4s ease-out;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.cookie-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cookie-message {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.cookie-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.accept {
+  background-color: #4caf50;
+  color: white;
+}
+
+.accept:hover {
+  background-color: #43a047;
+}
+
+.deny {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.deny:hover {
+  background-color: #d5d5d5;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}

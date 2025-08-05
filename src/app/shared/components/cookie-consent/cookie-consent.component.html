@@ -1,0 +1,13 @@
+@if (!cookieConsentService.hasConsented()) {
+  <div class="cookie-banner">
+    <div class="cookie-content">
+      <p class="cookie-message">
+        Để trải nghiệm ứng dụng vui lòng bật cookie!. Xác nhận bật cookie để bắt đầu?
+      </p>
+      <div class="cookie-actions">
+        <button class="btn accept" (click)="accept()">Đồng ý</button>
+        <button class="btn deny" (click)="deny()">Từ chối</button>
+      </div>
+    </div>
+  </div>
+}
