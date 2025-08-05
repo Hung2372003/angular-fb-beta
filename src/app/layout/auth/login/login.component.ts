@@ -68,8 +68,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
     const code = this.route.snapshot.queryParamMap.get('code');
     if (code) {
-           this.loadingService.show();
+          this.loadingService.show();
           let data = await this.authAPI.googleExchangeCodeLogin({ code: code });
+          if(data.error == null){ data = await this.authAPI.googleExchangeCodeRegister({ code: code });}
           this.alert.show(data.title,'success',4000,Date.now())
           await this.SignalRService.startConnection();
           if (data.id !== undefined && data.id !== null) {
