@@ -1,3 +1,4 @@
+import { AlertService } from './../../core/services/alert.service';
 import { SignalRService } from '../../core/services/signal-r.service';
 import { CallApiService } from '../../core/services/call-api.service';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
@@ -23,7 +24,8 @@ export class MessengerComponent implements OnInit, AfterViewInit{
       private CallApiService:CallApiService,
       private SignalRService:SignalRService,
        public tooltipService:TooltipService,
-       public router: Router
+       public router: Router,
+       private AlertService:AlertService
     ){
       this.actionMessageAPI = buildActionMessageAPI(this.CallApiService);
       this.personalActionAPI = buildPersonalActionAPI(this.CallApiService);
@@ -43,10 +45,13 @@ export class MessengerComponent implements OnInit, AfterViewInit{
     action?: () => void | undefined;
   }>= [
       { icon: 'fa-brands fa-facebook-messenger', label: 'Đoạn chat', notifiCount: 0, routerLink:'/messenger/chat', action: () => {} },
-      { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' },
-      { icon:'fa-regular fa-user-group', label:'Bạn bè', notifiCount: 0, routerLink:'/messenger/friend-management', action: () => {} },
-      { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => {} },
-    ];;
+      { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' , action: () => this.underDevelopment()},
+      { icon:'fa-regular fa-user-group', label:'Bạn bè', notifiCount: 0, routerLink:'/messenger/friend-management', action: () => this.underDevelopment()},
+      { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => this.underDevelopment() },
+    ];
+    underDevelopment(){
+      return this.AlertService.show('Tính năng đang được phát triển!','warning', 5000, Number(new Date()))
+    }
 
    async updateMenuItem() {
      if (this.listMenuItem && this.listMenuItem[0]) {

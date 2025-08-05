@@ -10,6 +10,7 @@
 
   <div class="menu-infor" [class.hidden-content]="!isToggleMenu">
     <app-preview-card
+      (click)="underDevelopment()"
       [avatar]="personalInformation?.avatar || ''"
       [title]="isToggleMenu ? personalInformation?.name || '' : ''"
       [theme]="{ avatarSize: '35px' }"
