@@ -4,6 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { ActionsMenuComponent } from './shared/components/actions-menu/actions-menu.component';
 import { ChatComponent } from './layout/chat/chat.component';
 import { MessengerComponent } from './layout/messenger/messenger.component';
+import { FriendManagementComponent } from './layout/friend-management/friend-management.component';
 
 export const routes: Routes = [
     {path:'',redirectTo:'login', pathMatch:'full'},
@@ -13,6 +14,7 @@ export const routes: Routes = [
       children:[
         {path:'',redirectTo:'chat',pathMatch:'full'},
         {path:'chat',component:ChatComponent},
+        {path:'friend-management',component:FriendManagementComponent}
       ]
     },
 

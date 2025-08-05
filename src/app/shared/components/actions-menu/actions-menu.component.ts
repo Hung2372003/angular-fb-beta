@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { TooltipService } from '../tooltip/tooltip.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-actions-menu',
-  imports: [],
+  imports: [RouterLink,RouterLinkActive],
   templateUrl: './actions-menu.component.html',
   styleUrl: './actions-menu.component.scss'
 })
@@ -18,7 +19,7 @@ export class ActionsMenuComponent implements OnInit {
     label: string;
     groupId?: number;
     notifiCount?: number;
-    backgroupActiveColor?:string;
+    routerLink?:string;
     action?: () => void | undefined;
   }>;
   @Input() theme?: Partial<{
@@ -26,6 +27,7 @@ export class ActionsMenuComponent implements OnInit {
     textColor?: string;
     backgroundColor?: string;
     boxShadowColor?: string;
+    backgroupActiveColor?:string;
   }>;
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class ActionsMenuComponent implements OnInit {
          '--text-color': this.theme.textColor || '#000',
          '--background-color': this.theme.backgroundColor || '#fff',
          '--boxShadow-color': this.theme.boxShadowColor || '#fdfdfd01',
+         '--backgroup-active-color':this.theme.backgroupActiveColor || '',
       });
     }else{
        this.setTheme(hostElement, {
@@ -46,6 +49,7 @@ export class ActionsMenuComponent implements OnInit {
           '--text-color':'#000',
           '--background-color':'#fff',
           '--boxShadow-color':'#9b9a9a',
+          '--backgroup-active-color':'',
       });
     }
   }

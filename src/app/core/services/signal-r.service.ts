@@ -1,3 +1,4 @@
+import { LoadingService } from './loading.service';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { environment } from '../../../environments/environment';
@@ -10,7 +11,9 @@ export class SignalRService {
   private hubConnection!: signalR.HubConnection;
   private connectionStarted: Promise<void>;
 
-  constructor() {
+  constructor(
+    private LoadingService:LoadingService
+  ) {
     this.hostUrlApi = environment.apiUrl;
     this.connectionStarted = this.startConnection(); // gọi trước luôn để đảm bảo
   }
@@ -43,6 +46,7 @@ async startConnection(): Promise<void> {
   }
 }
 private async waitForDisconnect(timeout = 5000): Promise<void> {
+
   const start = Date.now();
   while (this.hubConnection && this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
     if (Date.now() - start > timeout) {

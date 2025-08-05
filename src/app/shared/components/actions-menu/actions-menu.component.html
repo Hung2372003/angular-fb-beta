@@ -3,7 +3,7 @@
     <li (click)="item.action && item.action()"
         (mouseenter)="tooltipService.show(item.label)"
         (mouseleave)="tooltipService.hide()"
-        [style.background]="item.backgroupActiveColor ? item.backgroupActiveColor:''"
+        [routerLink]="[item.routerLink]" routerLinkActive="router-link-active"
     >
       <div class="menu-item">
            @if(item.icon){

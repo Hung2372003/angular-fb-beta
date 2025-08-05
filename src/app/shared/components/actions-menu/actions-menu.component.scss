@@ -35,10 +35,12 @@ ul {
     align-items: center;
     border-radius: 10px;
     padding: 7px 10px;
-    background:var(--backgroup-active-color, #ffffff00) ;
+    &.router-link-active{
+        background:var(--backgroup-active-color) ;
+    }
      cursor: pointer;
      &:hover {
-      background-color: #eeeeeed4;
+      background-color: #c2c2c2d4;
     };
     .menu-item{
     display: flex;

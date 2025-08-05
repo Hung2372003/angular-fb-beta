@@ -3,7 +3,8 @@
   <app-actions-menu [listMenu]="listMenuItem"
                     [theme]="{iconColor: 'black',
                               backgroundColor:'#ffffff00',
-                              boxShadowColor: '#fdfdfd01',}"
+                              boxShadowColor: '#fdfdfd01',
+                              backgroupActiveColor:'#ffffffd4'}"
                     [isLabel]="isToggleMenu"
                     />
 
@@ -16,7 +17,9 @@
     <div (click)="toggleMenu()" class="menu-blinds"><i class="fa-regular fa-blinds-open"></i></div>
   </div>
 </div>
+
 <router-outlet/>
+
 <div class="menu-bottom" [class.hidden]="!isHiddenMenuBottom || !checkScreenSize()">
   <div class="icon" [routerLink]="['/messenger/chat']" routerLinkActive="router-link-active"
     (mouseenter)="tooltipService.show('Đoạn chat')"

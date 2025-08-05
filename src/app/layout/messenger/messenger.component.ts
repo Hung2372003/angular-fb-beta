@@ -38,18 +38,20 @@ export class MessengerComponent implements OnInit, AfterViewInit{
     icon: string;
     label: string;
     groupId?: number;
-    backgroupActiveColor?:string,
+    routerLink?:string;
     notifiCount?: number;
     action?: () => void | undefined;
-  }>;
+  }>= [
+      { icon: 'fa-brands fa-facebook-messenger', label: 'Đoạn chat', notifiCount: 0, routerLink:'/messenger/chat', action: () => {} },
+      { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' },
+      { icon:'fa-regular fa-user-group', label:'Bạn bè', notifiCount: 0, routerLink:'/messenger/friend-management', action: () => {} },
+      { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => {} },
+    ];;
 
    async updateMenuItem() {
-    this.listMenuItem = [
-      { icon: 'fa-brands fa-facebook-messenger', label: 'Đoạn chat', notifiCount: (await this.actionMessageAPI.getUnreadMessageCount()).count,backgroupActiveColor:this.router.url=='/messenger/chat'?'#ffffffd4':'', action: () => { console.log('Tin nhắn clicked')} },
-       { icon:'fa-regular fa-scanner-touchscreen', label:'Xem tin' },
-      { icon:'fa-regular fa-user-group', label:'Bạn bè' },
-      { icon: 'fa-regular fa-users-medical', label: 'Tạo nhóm', action: () => { console.log('Tạo nhóm clicked')} },
-    ];
+     if (this.listMenuItem && this.listMenuItem[0]) {
+       this.listMenuItem[0].notifiCount = (await this.actionMessageAPI.getUnreadMessageCount()).count;
+     }
   }
   toggleMenu(){
     this.isToggleMenu = !this.isToggleMenu;
